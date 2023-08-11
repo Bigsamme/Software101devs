@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>{%block title%}{%endblock%}</title>
+      <link rel="icon" type="image/x-ion" href="../static/images/favicon.ico">
+      <link rel="stylesheet" href="../static/css/styles.css">
+   </head>
+   <body>
+      <header class="main-header">
+         <div class="main-header-logo">
+            <a href="{{url_for('home')}}"><img src="../static/images/favicon.ico" alt="Logo"></a>
+
+         </div>
+         <div class="main-header-search">
+            <input id="main-search-bar" placeholder="search..." type="search"></input>
+            
+
+         </div>
+         <nav class="main-header-nav">
+            <ul>
+               <li> <a href="{{url_for('home')}}">Home</a></li>
+               <li> <a href="{{url_for('login')}}">login</a></li>
+               <li> <a href="#">register</a></li>
+               <li> <a href="#">contact</a></li>
+               <li> <a href="#">about us</a></li>
+            </ul>
+
+         </nav>
+
+
+      </header>
+      {% block content%}
+      {% endblock %}
+   </body>
+</html>
