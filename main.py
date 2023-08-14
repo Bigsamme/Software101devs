@@ -13,6 +13,10 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route("/post")
+def show_post():
+    return render_template('post.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

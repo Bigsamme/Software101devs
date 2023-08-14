@@ -14,3 +14,8 @@ productContainers.forEach((item, i) => {
         item.scrollLeft -= containerWidth;
     })
 })
+
+
+function toggleMobileMenu(menu) {
+    menu.classList.toggle('open')
+}

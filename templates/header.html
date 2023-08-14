@@ -28,9 +28,30 @@
             </ul>
 
          </nav>
+         <div id="ham" onclick="toggleMobileMenu(this)">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <ul class="mobile-menu">
+               <li> <a href="{{url_for('home')}}">Home</a></li>
+               <li> <a href="{{url_for('login')}}">login</a></li>
+               <li> <a href="#">register</a></li>
+               <li> <a href="#">contact</a></li>
+               <li> <a href="#">about us</a></li>
+            </ul>
 
+         </div>
 
       </header>
+      <script src="../static/scripts/slider.js"> </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+      <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-M2F5L1915F');
+      </script>
       {% block content%}
       {% endblock %}
    </body>
