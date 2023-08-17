@@ -413,8 +413,13 @@ input[type="search" i]::-webkit-search-cancel-button {
     }
   }
 
+  .blog-page-container{
+    margin: 5vw;
+    display: flex;
+  }
   .blog-page-content {
-    margin: 5vw 20vw;
+    width: 100%;
+  
   }
   
   .blog-page-img {

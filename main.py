@@ -15,7 +15,7 @@ app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DB_URL", "sqlite:///posts.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URL", "sqlite:///userPosts.db")
 db = SQLAlchemy(app)
 
 class Post(db.Model):

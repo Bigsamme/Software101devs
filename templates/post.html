@@ -7,10 +7,13 @@
 
 <body>
     {% block content %} 
-
-    <div class="blog-page-content">
-        {{post.body}}
-     </div>
+    <artical>
+        <div class="blog-page-container">
+            <div class="blog-page-content">
+                {{post.body|safe}}
+            </div>
+        </div>
+    </artical>
      <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
      <script>
      window.dataLayer = window.dataLayer || [];
