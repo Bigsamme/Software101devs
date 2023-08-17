@@ -6,6 +6,7 @@ body{
 
 a {
     cursor: pointer;
+    text-decoration: none;
 }
 
 
@@ -55,7 +56,6 @@ a {
 }
 
 .home-blog-description {
-    color:red;
     width: 98%;
     margin: 0px;
     text-overflow: ellipsis;
@@ -65,7 +65,7 @@ a {
 }
 
 .home-blog-description h6 {
-    color:red;
+
     width: 100%;
     margin: 0px;
     height: 80%;
@@ -96,7 +96,6 @@ a {
 .login-body{
     align-items: center;
     align-content: center;
-    background-color: red;
 }
 
 .login-form{
@@ -120,7 +119,7 @@ a {
     width: fit-content;
     align-items: center;
     display: flex;
-    padding: 0px 5vw 0px 15vw;
+    padding: 0 5vw;
 }
 
 #main-search-bar {
@@ -146,6 +145,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 .main-header-nav {
     width: fit-content;
     height: 100%;
+    margin-right: 10px;
 }
 
 #ham {
@@ -154,6 +154,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   display: none;
   cursor: pointer;
 }
+
 
 #ham div {
   width: 35px;
@@ -193,29 +194,37 @@ input[type="search" i]::-webkit-search-cancel-button {
   display: none;
   position: absolute;
   top: 50px;
+  background-color: #000000;
   left: 0;
-  height: calc(100vw - 50px);
+  height: auto;
 }
 
 .mobile-menu li a{
   text-decoration: none;
-  color: black;
+  color: white;
   width: 100vw;
   width: 100%;
   
+}
+
+.mobile-menu li:hover{
+  background-color: #777777;
+ 
 }
 
 .mobile-menu li{
   text-decoration: none;
   list-style: none;
   text-align: center;
-  background-color: #ff7d7d;
-  border: 1px solid black;
+  background-color: #5b5b5b;
+  border: 1px solid rgb(120, 120, 120);
+  margin: 10px;
+  border-radius: 5px;
   
 }
 
 
-@media only screen and (max-width:600px){
+@media only screen and (max-width:1000px){
   .main-header-nav{
     display: none;
   }
@@ -231,7 +240,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 }
 
 .main-header-nav ul li{
-    display: inline;
+    display: flex;
     float: left;
 
 }
@@ -253,7 +262,8 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 }
 
-.product {
+
+  .product {
     position: relative;
     overflow: hidden;
     padding: 20px;
@@ -272,7 +282,11 @@ input[type="search" i]::-webkit-search-cancel-button {
     display: flex;
     overflow-x: auto;
     scroll-behavior: smooth;
+    align-items: stretch; /* Ensure all product cards have the same height */
   }
+  
+  /* Rest of your CSS styles... */
+  
   
   .product-container::-webkit-scrollbar {
     display: none;
@@ -281,14 +295,19 @@ input[type="search" i]::-webkit-search-cancel-button {
   .product-card {
     flex: 0 0 auto;
     width: 250px;
-    height: 450px;
+    border: #000000 solid 1px;
+    border-radius: 10px;
+    height: 250px;
+    background-color: #adadad;
     margin-right: 40px;
+    overflow: hidden;
   }
   
   .product-image {
     position: relative;
     width: 100%;
-    height: 350px;
+    border-radius: 10px;
+    height: 50%;
     overflow: hidden;
   }
   
@@ -297,18 +316,7 @@ input[type="search" i]::-webkit-search-cancel-button {
     height: 100%;
     object-fit: cover;
   }
-  
-  .discount-tag {
-    position: absolute;
-    background: #fff;
-    padding: 5px;
-    border-radius: 5px;
-    color: #ff7d7d;
-    right: 10px;
-    top: 10px;
-    text-transform: capitalize;
-  }
-  
+
   .card-btn {
     position: absolute;
     bottom: 10px;
@@ -338,41 +346,37 @@ input[type="search" i]::-webkit-search-cancel-button {
   .product-info {
     width: 100%;
     height: 100px;
-    padding-top: 10px;
   }
   
   .product-brand {
     text-transform: uppercase;
+    font-size: large;
+    text-decoration: none;
+    margin: 2px;
+    color: #000000;
   }
+
   
   .product-short-description {
-    width: 100%;
-    height: 20px;
+    width: 98%;
+    height: 100%;
     line-height: 20px;
     overflow: hidden;
+    text-decoration: none;
     opacity: 0.5;
-    text-transform: capitalize;
     margin: 5px 0;
+    color: #000000;
+    text-transform: capitalize;
   }
   
-  .price {
-    font-weight: 900;
-    font-size: 20px;
-  }
-  
-  .actual-price {
-    margin-left: 20px;
-    opacity: 0.5;
-    text-decoration: line-through;
-  }
-  
+
   .pre-btn,
   .nxt-btn {
     border: none;
     width: 10vw;
-    height: 100%;
     position: absolute;
     top: 0;
+    height: 120%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -383,11 +387,13 @@ input[type="search" i]::-webkit-search-cancel-button {
   
   .pre-btn {
     left: 0;
+
     transform: rotate(180deg);
   }
   
   .nxt-btn {
     right: 0;
+    
   }
   
   .pre-btn img,
@@ -400,6 +406,10 @@ input[type="search" i]::-webkit-search-cancel-button {
     .topnav a.icon {
       float: right;
       display: block;
+    }
+    .nxt-btn,
+    .pre-btn {
+      display: none;
     }
   }
 
