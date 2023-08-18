@@ -1,11 +1,11 @@
-from flask import Flask, render_template,url_for,request
-from wtforms import StringField,TextAreaField, SubmitField
-from flask_wtf import FlaskForm
+from flask import Flask, render_template,url_for,request,redirect, flash
 from flask_bootstrap import Bootstrap
-from flask_ckeditor import CKEditor, CKEditorField
+from flask_ckeditor import CKEditor
+from flask_login import LoginManager, login_required, login_user,logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
+from forms import RegisterForm, PostForm, LoginForm
 
 
 
@@ -15,8 +15,23 @@ app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
+
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URL", "sqlite:///posts.db")
 db = SQLAlchemy(app)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(id = user_id).first()
+
+class User(UserMixin, db.Model):
+    id = db.Column( db.Integer, primary_key = True)
+    username = db.Column( db. String(250))
+    email = db.Column( db. String(250))
+    password = db.Column( db. String(250))
+
 
 class Post(db.Model):
     id = db.Column( db.Integer, primary_key = True)
@@ -26,13 +41,7 @@ class Post(db.Model):
     language = db.Column( db. String(250))
     type = db.Column( db. String(250))
     
-class PostForm(FlaskForm):
-    title = StringField("Post Title")
-    description = StringField("Post Description")
-    language = StringField("Post language")
-    type  = StringField("Post type")
-    body = CKEditorField("Blog Content")
-    submit = SubmitField("Submit")
+
 
 with app.app_context():
     db.create_all()
@@ -45,13 +54,29 @@ def home():
     
     return render_template("index.html", posts = posts)
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if request.method == "GET":
+        return render_template('login.html',form = form)
+    else:
+        email = request.form['email']
+        user = User.query.filter_by( email = email).first()
+        if user:
+            if user.password == request.form['password']:
+                login_user(user)
+                return redirect(url_for('home'))
+            else:
+                flash("Password is incorrect", "error")
+                return render_template("login.html", form = form)
+        else:
+            return "Nope"
+            
 
 
 
 @app.route("/add-post", methods=["GET", "POST"])
+@login_required
 def add_post():
     if request.method == "GET":
         form = PostForm()
@@ -70,5 +95,24 @@ def add_post():
 def show_post(post_id,post_title):
     post = Post.query.filter_by(id = post_id).first()
     return render_template("post.html", post = post)
+
+@app.route('/register', methods = ["GET","POST"])
+def register():
+    if request.method == "GET":
+        form = RegisterForm()
+        return render_template('register.html', form = form)
+    elif request.method == "POST":
+        user = User( username = request.form["username"],
+                    email = request.form['email'],
+                    password = request.form['password'])
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('home'))
+    
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

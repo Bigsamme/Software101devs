@@ -2,6 +2,7 @@ html,
 body{
     margin: 0px;
     width: 100%;
+    overflow-x: hidden;
 }
 
 a {
@@ -215,6 +216,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 .mobile-menu li{
   text-decoration: none;
   list-style: none;
+  color:#fff;
   text-align: center;
   background-color: #5b5b5b;
   border: 1px solid rgb(120, 120, 120);
@@ -414,13 +416,30 @@ input[type="search" i]::-webkit-search-cancel-button {
   }
 
   .blog-page-container{
-    margin: 5vw;
-    display: flex;
+    width: 70vw;
   }
-  .blog-page-content {
-    width: 100%;
+
+  .blog-page-article {
+    margin: 15vw;
+    display: flex;
+    width: 80vw;
+
+  }
+
+
+
+  .blog-page-content img[style]{
+     max-width: 100% !important;
+     height: auto !important;
   
   }
+  .blog-page-content p{
+    font-size: 20px;
+
+ 
+ }
+ 
+  
   
   .blog-page-img {
     margin: 5vw 20vw;
