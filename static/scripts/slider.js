@@ -16,6 +16,3 @@ productContainers.forEach((item, i) => {
 })
 
 
-function toggleMobileMenu(menu) {
-    menu.classList.toggle('open')
-}

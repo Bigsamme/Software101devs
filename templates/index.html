@@ -5,6 +5,7 @@
 
 <body>
     {% block content%}
+    <div id="content">
     <section class="product"> 
         <h2 class="product-category">best selling</h2>
         <div class="product-container">
@@ -26,6 +27,8 @@
             {% endfor %}
         </div>
     </section>
+    <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
+ 
 
         
     <script src="../static/scripts/slider.js"> </script>
@@ -37,6 +40,8 @@
 
     gtag('config', 'G-M2F5L1915F');
     </script>
+</div>
     {% endblock %}
+
 </body>
 </html>

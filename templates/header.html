@@ -13,18 +13,21 @@
             <a href="{{url_for('home')}}"><img src="{{url_for('static', filename='images/favicon.ico')}}" alt="Logo"></a>
 
          </div>
-         <div class="main-header-search">
-            <input id="main-search-bar" placeholder="search..." type="search"></input>
-            
+
+         <div class="main-header-search" >
+            <form method="POST" action="{{url_for('search')}}">
+               {{form.hidden_tag()}}
+            <input id="main-search-bar" placeholder="search..." type="search" name="searched"></input>
+         </form>
 
          </div>
          <nav class="main-header-nav">
             <ul>
 
                <a href="{{url_for('login')}}"> <li> login</li></a>
-               <li> <a href="{{url_for('register')}}">register</a></li>
-               <li> <a href="#">contact</a></li>
-               <li> <a href="#">about us</a></li>
+               <a href="{{url_for('register')}}"> <li> Register</li></a>
+               <a href="#"> <li> About Us</li></a>
+               <a href="#"> <li> Contact Us</li></a>
             </ul>
 
          </nav>
@@ -34,15 +37,16 @@
             <div class="bar3"></div>
             <ul class="mobile-menu">
                <a href="{{url_for('login')}}"> <li> login</li></a>
-               <li> <a href="{{url_for('register')}}">register</a></li>
-               <li> <a href="#">contact</a></li>
-               <li> <a href="#">about us</a></li>
+               <a href="{{url_for('register')}}"> <li> register</li></a>
+               <a href="#"> <li> Contact</li></a>
+               <a href="#"> <li> About Us</li></a>
             </ul>
 
          </div>
 
       </header>
- 
+      <script src="{{url_for('static', filename='scripts/mobile-menu.js')}}"></script>
+
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
       <script>
          
@@ -54,5 +58,51 @@
       </script>
       {% block content%}
       {% endblock %}
+      <footer class="footer">
+         <div class="footer-title"><a href="{{url_for('home')}}">Software Development 101</a></div>
+         <table class="footer-table">
+            <tr> 
+               <td>
+                  <table class="footer-left">
+                     <tr class="footer-colunm">
+                        <td>
+                           <div class="footer-support">
+                              <div class="footer-categories">
+                                 Support
+                              </div>
+
+                              <div class="footer-content">
+                                 <ul>
+                                    <li>About Us</li>
+                                    <li>Forem</li>
+                                    <li>FAQ</li>
+                                 </ul>
+                              </div>
+                           </div>
+                  </table>
+               </td>
+               <td>
+                  <table class="footer-right">
+                     <tr class="footer-colunm">
+                        <td>
+                           <div class="footer-support">
+                              <div class="footer-categories">
+                                 Support
+                              </div>
+
+                              <div class="footer-content">
+                                 <ul>
+                                    <li><a href="{{url_for('about_us')}}">About Us</a></li>
+                                    <li>Forem</li>
+                                    <li>FAQ</li>
+                                 </ul>
+                              </div>
+                           </div>
+                  </table>
+               </td>
+            </tr>
+         </table>
+      </footer>
+     
    </body>
 </html>

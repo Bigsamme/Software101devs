@@ -2,6 +2,7 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
   {% block content%}
+  <div id="content">
   {% with messages = get_flashed_messages() %}
   {% if messages%}
   <ul class="flashes">
@@ -23,4 +24,5 @@
     
       gtag('config', 'G-M2F5L1915F');
     </script>
+  </div>
 {% endblock %}

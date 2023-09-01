@@ -5,9 +5,7 @@ from flask_login import LoginManager, login_required, login_user,logout_user, Us
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
-from forms import RegisterForm, PostForm, LoginForm
-
-
+from forms import RegisterForm, PostForm, LoginForm, SearchForm
 
 
 app = Flask(__name__)
@@ -54,6 +52,14 @@ def home():
     
     return render_template("index.html", posts = posts)
 
+@app.context_processor
+def base():
+    form = SearchForm()
+    return dict(form = form)
+
+@app.route("/support/about-us")
+def about_us():
+    return render_template('about-us.html')
 @app.route('/login', methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -109,6 +115,19 @@ def register():
         db.session.commit()
         login_user(user)
         return redirect(url_for('home'))
+    
+@app.route('/search', methods=["POST"])
+def search():
+    form = SearchForm()
+    posts = Post.query
+    if form.validate_on_submit():
+        searched = form.searched.data
+        posts = posts.filter(Post.body.like('%' + searched + "%"))
+        posts = posts.order_by(Post.title).all()
+        if posts == []:
+            posts = Post.query.all()
+        return render_template("index.html",posts = posts)
+    return "Hello"
     
 @app.route('/logout')
 def logout():
