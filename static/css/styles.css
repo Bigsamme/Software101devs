@@ -522,7 +522,7 @@ input[type="search" i]::-webkit-search-cancel-button {
       margin: 40px;
     }
     .blog-page-content img{
-      width: 100% !important;
+      height: 300px;
       max-width: 100%;
     }
   }
@@ -533,10 +533,31 @@ input[type="search" i]::-webkit-search-cancel-button {
     }
     
     .blog-page-content img{
-      width: 100% !important;
       max-width: 100%;
+      height: auto !important;
     }
   }
+
+  #email, #password {
+    border:solid 1px black;
+    border-radius: 20px;
+  }
+
+  #login-container{
+    display: flex;
+    justify-content: center;
+  }
+
+  #login-form {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 400px;
+    height: 400px;
+    box-shadow: #5b5b5b 2px 2px 5px;
+
+  }
+
+  
 
   
 
@@ -545,10 +566,6 @@ input[type="search" i]::-webkit-search-cancel-button {
   }
 
 
-  .blog-page-content img[style]{
-     height: auto !important;
-  
-  }
   .blog-page-content p{
     font-size: 20px;
 
@@ -577,6 +594,36 @@ input[type="search" i]::-webkit-search-cancel-button {
   .collection {
     position: relative;
   }
+
+  #email {
+    display: block;
+    line-height: 20px;
+    width: 60%;
+    align-self: center;
+  }
+
+
+    
+  
+
+  .control-label {
+    display: block;
+  }
+
+  #password {
+    display: block;
+    line-height: 20px;
+    width: 60%;
+    align-self: center;
+  }
+
+  #submit{
+    background-color: rgb(176, 237, 198);
+    border: black solid 1px;
+    border-radius: 20px;
+    margin-top: 10px;
+    width: 60%;
+  }
   
   .collection img {
     width: 100%;
@@ -584,14 +631,48 @@ input[type="search" i]::-webkit-search-cancel-button {
     object-fit: cover;
   }
 
+  #login-form {
+    margin-top: 100px;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 620px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    box-shadow: #5b5b5b 2px 2px 5px;
+
+  }
+
+  @media screen and (max-width: 680px) {
+    #login-form {
+      border:none;
+      width: 100%;
+      box-shadow: none;
+    }
+    #email,#password{
+      width:80%;
+      display:block;
+      line-height: 50px;
+      border-radius: 4px;
+      margin: 20px;
+    }
+    .form-group{
+      display: block;
+    }
+  }
+
+  #email:focus{
+    border:solid 5px lightblue;
+  }
   
 
-
   .form{
-    margin: 20vw 30vw;
-    align-items: center;
+    position: relative;
     align-self: center;
+    width: 100%;
   }
+
+
   .collection p {
     position: absolute;
     top: 50%;

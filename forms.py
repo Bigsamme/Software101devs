@@ -21,7 +21,7 @@ class PostForm(FlaskForm):
 class LoginForm(FlaskForm):
     email = EmailField("Email", validators=[InputRequired(),DataRequired()])
     password = PasswordField("Password", validators=[InputRequired(),DataRequired(),length(min=8)])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Log In")
     
     
 class SearchForm(FlaskForm):
