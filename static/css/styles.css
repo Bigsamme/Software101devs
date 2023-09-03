@@ -193,6 +193,8 @@ input[type="search" i]::-webkit-search-cancel-button {
 .main-header-nav {
     width: fit-content;
     height: 100%;
+    display: flex;
+    justify-content: center;
     margin-right: 10px;
 }
 
@@ -319,6 +321,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 }
 .main-header-nav ul{
     list-style: none;
+    align-self: center;
     
 }
 
@@ -600,7 +603,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 
   @media screen and (min-width:700px) {
     #login-form {
-      margin-top: 50px;
+      margin-top: 100px;
       border: 1px solid rgb(188, 188, 188);
       border-radius: 15px;
       height: fit-content;
@@ -609,7 +612,6 @@ input[type="search" i]::-webkit-search-cancel-button {
       display: block;
       justify-content: center;
       box-shadow: #c1c1c1 0px 0px 3px;
-
     }
 
     .form-group label {
@@ -623,26 +625,51 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 
 
-  @media screen and (max-width:650px) {
+  @media screen and (max-width:700px) {
     #login-form {
       border:none;
       box-shadow: none;
 
     }
+    .login-title{
+      margin-top: 10vh;
+    }
 
   }
 
   .login-or {
-    border-bottom: 1px solid #c2c8d0;
-    content: "";
-    flex: 1 0 auto;
-    height: 50%;
-    margin-right: 5px;
-}
+    border-bottom: 1px solid #6a7c94;
+    color: #000000;
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
 
-  span hr {
-    width: 40px;
-    height: 1px;
+
+
+  .seperator {
+    width: 40%;
+    display: inline-block;
+  }
+
+  .seperator-word{
+    display: inline;
+    align-self: center;
+    margin-left: 6%;
+  }
+
+
+  
+
+
+  
+  .left {
+    float: left;
+    margin-left: 2%;
+  }
+  .right {
+    float: right;
+    margin-right: 2%;
   }
 
 
