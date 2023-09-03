@@ -7,6 +7,7 @@
   <div id="content">
   <div id="login-container">
   <div id="login-form">
+    <div class="login-title"><h3>Log In</h3></div>
   {% with messages = get_flashed_messages() %}
   {% if messages%}
   <ul class="flashes">
@@ -18,8 +19,10 @@
   {% endwith %}
   
   {{wtf.quick_form(form)}}
+  <span class="login-or"><hr><p>OR</p><hr></span>
   </div>
   </div>
+  
 
     
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>

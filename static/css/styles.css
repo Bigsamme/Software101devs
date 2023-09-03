@@ -29,9 +29,11 @@ a {
 
 .main-header {
     background-color: black;
-    height: 60px;
+    height: 50px;
     width: 100vw;
     display: flex;
+    z-index: 9;
+    position: fixed;
     justify-content: space-between;
 
     
@@ -204,15 +206,15 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 #ham div {
   width: 35px;
-  height: 3px;
+  height: 2px;
   background-color: #fff;
   margin: 6px 0;
   transition: 0.4s;
 }
 
 .open .bar1 {
-  -webkit-transform: rotate(-45deg) translate(-6px, 6px);
-  transform: rotate(-45deg) translate(-6px, 6px);
+  -webkit-transform: rotate(-56deg) translate(-8px, 8px);
+  transform: rotate(-45deg) translate(-4px, 4px);
 }
 
 .open .bar2{
@@ -348,7 +350,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   .product {
     position: relative;
     overflow: hidden;
-    padding: 20px;
+    padding: 50px;
   }
   
   .product-category {
@@ -522,8 +524,9 @@ input[type="search" i]::-webkit-search-cancel-button {
       margin: 40px;
     }
     .blog-page-content img{
-      height: 300px;
+      height: auto  !important;
       max-width: 100%;
+      max-height: 400px;
     }
   }
   @media screen and (min-width: 600px) {
@@ -537,28 +540,6 @@ input[type="search" i]::-webkit-search-cancel-button {
       height: auto !important;
     }
   }
-
-  #email, #password {
-    border:solid 1px black;
-    border-radius: 20px;
-  }
-
-  #login-container{
-    display: flex;
-    justify-content: center;
-  }
-
-  #login-form {
-    border: 1px solid black;
-    border-radius: 5px;
-    width: 400px;
-    height: 400px;
-    box-shadow: #5b5b5b 2px 2px 5px;
-
-  }
-
-  
-
   
 
   head {
@@ -595,35 +576,14 @@ input[type="search" i]::-webkit-search-cancel-button {
     position: relative;
   }
 
-  #email {
-    display: block;
-    line-height: 20px;
-    width: 60%;
-    align-self: center;
-  }
-
-
-    
   
 
-  .control-label {
-    display: block;
+  #submit { 
+    background-color: aquamarine;
+    border: none;
+    line-height: 30px;
   }
 
-  #password {
-    display: block;
-    line-height: 20px;
-    width: 60%;
-    align-self: center;
-  }
-
-  #submit{
-    background-color: rgb(176, 237, 198);
-    border: black solid 1px;
-    border-radius: 20px;
-    margin-top: 10px;
-    width: 60%;
-  }
   
   .collection img {
     width: 100%;
@@ -631,45 +591,109 @@ input[type="search" i]::-webkit-search-cancel-button {
     object-fit: cover;
   }
 
-  #login-form {
-    margin-top: 100px;
-    border: 1px solid black;
-    border-radius: 5px;
-    width: 620px;
-    height: 400px;
-    display: flex;
-    justify-content: center;
-    box-shadow: #5b5b5b 2px 2px 5px;
-
+  .login-title {
+    text-align: left;
+    font-size: 24px;
+    font-weight: 500;
+    margin-left: 20px;
   }
 
-  @media screen and (max-width: 680px) {
+  @media screen and (min-width:700px) {
+    #login-form {
+      margin-top: 50px;
+      border: 1px solid rgb(188, 188, 188);
+      border-radius: 15px;
+      height: fit-content;
+      width: 55vw;
+      max-width: 500px;
+      display: block;
+      justify-content: center;
+      box-shadow: #c1c1c1 0px 0px 3px;
+
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 20px;
+      font-style:bold;
+    }
+
+  }
+  
+
+
+
+  @media screen and (max-width:650px) {
     #login-form {
       border:none;
-      width: 100%;
       box-shadow: none;
+
     }
-    #email,#password{
-      width:80%;
-      display:block;
-      line-height: 50px;
-      border-radius: 4px;
-      margin: 20px;
-    }
-    .form-group{
-      display: block;
-    }
+
   }
 
-  #email:focus{
-    border:solid 5px lightblue;
+  .login-or {
+    border-bottom: 1px solid #c2c8d0;
+    content: "";
+    flex: 1 0 auto;
+    height: 50%;
+    margin-right: 5px;
+}
+
+  span hr {
+    width: 40px;
+    height: 1px;
+  }
+
+
+  #login-form {
+    width: 100%;
+  }
+
+  #username
+  ,#email
+  ,#password
+  ,#submit{
+    width:90%;
+    border:solid 1px black;
+    display:block;
+    border-radius: 5px;
+    margin: 20px;
+  }
+
+  #submit{
+    padding: 2px;
+    width: 91%;
+  }
+  #email
+  ,#password
+  ,#username {
+    line-height: 50px;
+  }
+
+  .form-group label {
+    margin-left: 20px;
+  }
+
+
+
+  #email:focus
+  ,#password:focus
+  ,#username:focus{
+    background-color: #bbc2c0;
   }
   
 
   .form{
     position: relative;
     align-self: center;
-    width: 100%;
+  }
+
+
+
+  #login-container{
+    display: flex;
+    justify-content: center;
   }
 
 

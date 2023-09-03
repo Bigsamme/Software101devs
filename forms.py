@@ -5,10 +5,10 @@ from wtforms.validators import InputRequired,length, DataRequired
 
 
 class RegisterForm(FlaskForm):
+    username = StringField("Username", validators=[InputRequired(),DataRequired()])
     email = EmailField("Email", validators=[InputRequired(),DataRequired()])
     password = PasswordField("Password", validators=[InputRequired(),DataRequired(),length(min=8)])
-    username = StringField("Username", validators=[InputRequired(),DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Sign up")
     
 class PostForm(FlaskForm):
     title = StringField("Post Title")
