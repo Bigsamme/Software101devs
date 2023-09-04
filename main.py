@@ -106,7 +106,7 @@ def image():
 @app.route("/")
 def home():
     posts = BlogPosts.query.all()
-    user = User.query.filter_by(email = "samuelwhitehall@gmail.com").first()
+    user = current_user
     
     return render_template("index.html", posts = posts,user= user)
 
@@ -144,7 +144,7 @@ def login():
 def add_post():
     form = BlogPostForm()
     if request.method == "GET":
-        return render_template('add-post.html', form = form)
+        return render_template('add-post.html', form = form, add_post=True)
     elif request.method == "POST":
         new_post = BlogPosts(
             title=form.title.data,

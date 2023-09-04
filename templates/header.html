@@ -56,8 +56,13 @@
 
       gtag('config', 'G-M2F5L1915F');
       </script>
+      {% if not add_post%}
+      <div id="content">
+      {%endif%}
       {% block content%}
       {% endblock %}
+      
+      </div>
       <footer class="footer">
          <div class="footer-title"><a href="{{url_for('home')}}">Software Development 101</a></div>
          <table class="footer-table">

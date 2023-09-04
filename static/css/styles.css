@@ -34,6 +34,7 @@ a {
     width: 100vw;
     display: flex;
     z-index: 9;
+    top:0;
     position: fixed;
     justify-content: space-between;
 
@@ -294,6 +295,10 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 }
 
+#cke_content {
+  margin:70px;
+}
+
 .footer {
   background-color: black;
   color:white;
@@ -520,6 +525,10 @@ input[type="search" i]::-webkit-search-cancel-button {
 
   }
 
+
+  .blog-page-container{
+    margin: 40px;
+  }
 
 
 

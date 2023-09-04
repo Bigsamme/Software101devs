@@ -11,7 +11,6 @@
 <body>
 
     {% block content%}
-    <div id="content">
     <div id="login-container">
     <div id="login-form">
       <div class="login-title"><h3>Register</h3></div>
@@ -26,7 +25,6 @@
     {% endwith %}
     
     {{wtf.quick_form(form)}}
-    </div>
     </div>
     </div>
     {% endblock%}
