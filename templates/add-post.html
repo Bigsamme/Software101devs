@@ -10,10 +10,11 @@
 </head>
 <body>
     {% block content%} 
+    <div id="content">
         {{ ckeditor.load() }}
         {{ ckeditor.config(name='content') }}
         {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-
+    </div>
     {% endblock%}
 
 </body>
