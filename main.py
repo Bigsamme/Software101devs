@@ -1,20 +1,26 @@
 from flask import Flask, render_template,url_for,request,redirect, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from flask_login import LoginManager, login_required, login_user,logout_user, UserMixin
+from flask_login import LoginManager, login_required, login_user,logout_user, UserMixin,current_user
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
-from forms import RegisterForm, PostForm, LoginForm, SearchForm
-
+from sqlalchemy.orm import relationship
+from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
+from werkzeug.utils import secure_filename
+import random
+import string
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
+app.config['UPLOAD_FOLDER'] = "static/images/profile_pics"
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URL", "sqlite:///posts.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DB_URL", "sqlite:///blog_posts.db")
 db = SQLAlchemy(app)
 
 login_manager = LoginManager()
@@ -23,34 +29,86 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id = user_id).first()
+    
 
 class User(UserMixin, db.Model):
+    __tablename__ = "users"
     id = db.Column( db.Integer, primary_key = True)
-    username = db.Column( db. String(250))
-    email = db.Column( db. String(250))
+    username = db.Column( db.String(250))
+    email = db.Column( db.String(250))
     password = db.Column( db. String(250))
+    profile_pic = db.Column(db.String(250))
+    posts = relationship("BlogPosts", back_populates="author")
+    
+    
 
-
-class Post(db.Model):
+class BlogPosts(db.Model):
+    __tablename__ = "blog_posts"
     id = db.Column( db.Integer, primary_key = True)
-    title = db.Column( db. String(250))
+    title = db.Column( db.String(250))
     description = db.Column( db. String(250))
     body = db.Column( db.Text)
-    language = db.Column( db. String(250))
-    type = db.Column( db. String(250))
-    
+    language = db.Column( db.String(250))
+    type = db.Column( db.String(250))
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author = relationship("User", back_populates="posts")
 
 
 with app.app_context():
     db.create_all()
-    
 
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+           
+@app.route('/image', methods = ["GET","POST"])  
+def image():
+    lower_letters = string.ascii_lowercase
+    upper_letters = string.ascii_uppercase
+    file_path = ""
+    for letter in range(50):
+        file_path += random.choice(upper_letters)
+        file_path += random.choice(lower_letters)
+    form =  FileSubmit()
+    if request.method =="GET":
+        return render_template('login.html', form = form)
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # If the user does not select a file, the browser submits an
+        # empty file without a filename.
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            type_ = file.filename.split(".")[1]
+            file_name = '.'.join([file_path,type_])
+            user = User.query.filter_by(email = current_user.email).first()
+            user.profile_pic = file_name
+            db.session.add(user)
+            db.session.commit()
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+            return redirect(url_for('home'))
+    return '''
+    <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
 
 @app.route("/")
 def home():
-    posts = Post.query.all()
+    posts = BlogPosts.query.all()
+    user = User.query.filter_by(email = "samuelwhitehall@gmail.com").first()
     
-    return render_template("index.html", posts = posts)
+    return render_template("index.html", posts = posts,user= user)
 
 @app.context_processor
 def base():
@@ -84,22 +142,28 @@ def login():
 @app.route("/add-post", methods=["GET", "POST"])
 @login_required
 def add_post():
+    form = BlogPostForm()
     if request.method == "GET":
-        form = PostForm()
         return render_template('add-post.html', form = form)
     elif request.method == "POST":
-        post = Post( title = request.form['title'],
-                    description = request.form['description'],
-                    body = request.form['body'],
-                    language = request.form['language'],
-                    type = request.form['type'])
-        db.session.add(post)
+        new_post = BlogPosts(
+            title=form.title.data,
+            description=form.description.data,
+            body=form.body.data,
+            language=form.language.data,
+            type=form.type.data,
+            author=current_user  # Set the author to the current logged-in user
+        )
+
+        # Then, add the new post to the database
+        db.session.add(new_post)
         db.session.commit()
-        return render_template('index.html')
+        return redirect(url_for('home'))
+    
     
 @app.route('/show-post/<post_title>/<int:post_id>')
 def show_post(post_id,post_title):
-    post = Post.query.filter_by(id = post_id).first()
+    post = BlogPosts.query.filter_by(id = post_id).first()
     return render_template("post.html", post = post)
 
 @app.route('/register', methods = ["GET","POST"])
@@ -119,13 +183,13 @@ def register():
 @app.route('/search', methods=["POST"])
 def search():
     form = SearchForm()
-    posts = Post.query
+    posts = BlogPosts.query
     if form.validate_on_submit():
         searched = form.searched.data
-        posts = posts.filter(Post.body.like('%' + searched + "%"))
-        posts = posts.order_by(Post.title).all()
+        posts = posts.filter(BlogPosts.body.like('%' + searched + "%"))
+        posts = posts.order_by(BlogPosts.title).all()
         if posts == []:
-            posts = Post.query.all()
+            posts = BlogPosts.query.all()
         return render_template("index.html",posts = posts)
     return "Hello"
     
@@ -133,5 +197,7 @@ def search():
 def logout():
     logout_user()
     return redirect(url_for('home'))
+
+    
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

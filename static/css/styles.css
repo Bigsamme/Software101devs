@@ -626,7 +626,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 
   @media screen and (max-width:700px) {
-    #login-form {
+    #login-container #login-form {
       border:none;
       box-shadow: none;
 
@@ -673,7 +673,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   }
 
 
-  #login-form {
+  #login-container #login-form {
     width: 100%;
   }
 
@@ -709,9 +709,13 @@ input[type="search" i]::-webkit-search-cancel-button {
   ,#username:focus{
     background-color: #bbc2c0;
   }
+
+  .form {
+    margin-top: 10vh;
+  }
   
 
-  .form{
+  #login-container .form{
     position: relative;
     align-self: center;
   }
@@ -734,7 +738,18 @@ input[type="search" i]::-webkit-search-cancel-button {
     font-size: 50px;
     text-transform: capitalize;
   }
+
+  .post-profile-pic{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin-top: 10px;
+    border-radius: 50%;
+  }
   
+  .profile-link{
+    display: inline-block;
+  }
   .collection:nth-child(3) {
     grid-column: span 2;
     margin-bottom: 10px;

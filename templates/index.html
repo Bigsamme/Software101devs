@@ -20,10 +20,16 @@
                 </div>
                 <div class="product-info">
                     <h2 class="product-brand">{{post.title}}</h2>
+                    <div class="profile-links">
+                    <img class="post-profile-pic" src="{{ url_for('static', filename='images/profile_pics/{}'.format(post.author.profile_pic)) }}">
+                    <a class="profile-link" href="#">By: {{post.author.username}}</a>
                     <p class="product-short-description">{{post.description}}</p>
+                    </div>
+                    
                 </div>
             </div>
             </a>
+
             {% endfor %}
         </div>
     </section>

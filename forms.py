@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_ckeditor import CKEditorField
-from wtforms import EmailField,StringField,PasswordField,SubmitField
+from wtforms import EmailField,StringField,PasswordField,SubmitField,FileField
 from wtforms.validators import InputRequired,length, DataRequired
 
 
@@ -10,7 +10,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired(),DataRequired(),length(min=8)])
     submit = SubmitField("Sign up")
     
-class PostForm(FlaskForm):
+class BlogPostForm(FlaskForm):
     title = StringField("Post Title")
     description = StringField("Post Description")
     language = StringField("Post language")
@@ -27,3 +27,7 @@ class LoginForm(FlaskForm):
 class SearchForm(FlaskForm):
     searched = StringField("Searched", validators=[InputRequired()])
     submit = SubmitField("Submit")
+    
+class FileSubmit(FlaskForm):
+    file = FileField("FileField")
+    submit = SubmitField("submit")
