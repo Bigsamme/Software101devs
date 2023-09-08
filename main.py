@@ -158,7 +158,7 @@ def add_post():
         return redirect(url_for('login'))
     form = BlogPostForm()
     if request.method == "GET":
-        return render_template('add-post.html', form = form, add_post=True)
+        return render_template('add-post.html', form = form)
     elif request.method == "POST":
         new_post = BlogPosts(
             title=form.title.data,
