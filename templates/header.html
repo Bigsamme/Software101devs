@@ -24,10 +24,13 @@
          <nav class="main-header-nav">
             <ul>
 
+               {% if not current_user.is_authenticated%}
                <a href="{{url_for('login')}}"> <li> login</li></a>
-               <a href="{{url_for('register')}}"> <li> Register</li></a>
+               <a href="{{url_for('register')}}"> <li> register</li></a>
+               {% endif %}
                <a href="{{url_for('about_us')}}"> <li> About Us</li></a>
                <a href="#"> <li> Contact Us</li></a>
+               <a href="{{url_for('logout')}}"> <li> Log Out</li></a>
             </ul>
 
          </nav>
@@ -36,10 +39,13 @@
             <div class="bar2"></div>
             <div class="bar3"></div>
             <ul class="mobile-menu">
+               {% if not current_user.is_authenticated%}
                <a href="{{url_for('login')}}"> <li> login</li></a>
                <a href="{{url_for('register')}}"> <li> register</li></a>
+               {% endif %}
                <a href="#"> <li> Contact</li></a>
                <a href="{{url_for('about_us')}}"> <li> About Us</li></a>
+               <a href="{{url_for('logout')}}"> <li> Log Out</li></a>
             </ul>
 
          </div>
@@ -61,7 +67,6 @@
       {%endif%}
       {% block content%}
       {% endblock %}
-      
       </div>
       <footer class="footer">
          <div class="footer-title"><a href="{{url_for('home')}}">Software Development 101</a></div>

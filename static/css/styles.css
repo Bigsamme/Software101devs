@@ -12,10 +12,52 @@ html {
 
 
 a {
-    cursor: pointer;
-    text-decoration: none;
+  cursor: pointer;
+  text-decoration: none;
 }
 
+.user-articals {
+  margin-top: 50px;
+  justify-content: center;
+  margin-left: 60px;
+  width: 90%;
+}
+
+.dashboard-post {
+  margin-bottom: 20px;
+  justify-content: space-around;
+  border: #c6c6c6 solid 1px;
+  border-radius: 5px;
+  line-height: 40px;
+
+}
+
+.tab{
+  width: 32%;
+  display: inline-block;
+}
+
+
+.dashboard-title{
+  font-size: 16px;
+  font-weight: 500;
+  font-style: bold;
+}
+
+
+
+#error-message{
+  background-color: rgb(255, 182, 182);
+  max-width: 455px;
+  position: relative;
+  width: 90%;
+  line-height: 40px;
+  border:solid 1px black;
+  display:block;
+  padding: 1px 2px;
+  border-radius: 5px;
+  margin: 20px;
+}
 
 
 
@@ -721,7 +763,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   }
 
   .form {
-    margin-top: 10vh;
+    margin-top: 40px;
   }
   
 

@@ -5,11 +5,14 @@ from flask_login import LoginManager, login_required, login_user,logout_user, Us
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
+import datetime as dt
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
 from werkzeug.utils import secure_filename
 import random
 import string
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
@@ -34,9 +37,10 @@ def load_user(user_id):
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column( db.Integer, primary_key = True)
-    username = db.Column( db.String(250))
-    email = db.Column( db.String(250))
-    password = db.Column( db. String(250))
+    username = db.Column( db.String(250), )
+    email = db.Column( db.String(250),nullable=True)
+    password = db.Column( db.String(250))
+    registration_date = db.Column(db.String(100))
     profile_pic = db.Column(db.String(250))
     posts = relationship("BlogPosts", back_populates="author")
     
@@ -50,6 +54,7 @@ class BlogPosts(db.Model):
     body = db.Column( db.Text)
     language = db.Column( db.String(250))
     type = db.Column( db.String(250))
+    views = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
 
@@ -120,6 +125,8 @@ def about_us():
     return render_template('about-us.html')
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = LoginForm()
     if request.method == "GET":
         return render_template('login.html',form = form)
@@ -134,14 +141,21 @@ def login():
                 flash("Password is incorrect", "error")
                 return render_template("login.html", form = form)
         else:
-            return "Nope"
+            flash("A User with this email not found", "error")
+            return render_template('login.html', form = form)
             
 
+@app.route('/<username>/dashboard')
+def dashboard(username):
+    user = User.query.filter_by(username = username).first()
+    user_posts = BlogPosts.query.filter_by(author_id = user.id).all()
+    return render_template("dashboard.html", user = user,user_posts = user_posts)
 
 
 @app.route("/add-post", methods=["GET", "POST"])
-@login_required
 def add_post():
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
     form = BlogPostForm()
     if request.method == "GET":
         return render_template('add-post.html', form = form, add_post=True)
@@ -152,6 +166,7 @@ def add_post():
             body=form.body.data,
             language=form.language.data,
             type=form.type.data,
+            views = 0,
             author=current_user  # Set the author to the current logged-in user
         )
 
@@ -164,6 +179,9 @@ def add_post():
 @app.route('/show-post/<post_title>/<int:post_id>')
 def show_post(post_id,post_title):
     post = BlogPosts.query.filter_by(id = post_id).first()
+    post.views = post.views + 1
+    db.session.add(post)
+    db.session.commit()
     return render_template("post.html", post = post)
 
 @app.route('/register', methods = ["GET","POST"])
@@ -174,7 +192,8 @@ def register():
     elif request.method == "POST":
         user = User( username = request.form["username"],
                     email = request.form['email'],
-                    password = request.form['password'])
+                    password = request.form['password'],
+                    registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
         db.session.add(user)
         db.session.commit()
         login_user(user)

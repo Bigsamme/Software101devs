@@ -7,17 +7,38 @@
   <div id="login-container">
   <div id="login-form">
     <div class="login-title"><h3>Log In</h3></div>
-  {% with messages = get_flashed_messages() %}
-  {% if messages%}
-  <ul class="flashes">
-    {% for message in messages %}
-    <li style="color:red; list-style:none;"> {{message}} </li>
-    {%endfor%}
-  </ul>
-  {% endif %}
-  {% endwith %}
   
-  {{wtf.quick_form(form)}}
+    <form action="" method="post" class="form" role="form">
+      <input id="csrf_token" name="csrf_token" type="hidden" value="IjRjNWRiMDZmZGE1NDc0ZDM0ZTA4Mzc1Mzg5NjlmZDlmMDdjOTVlMTgi.ZPruig.rLzDXKnBkPXf0OL_KlDNH5Amf6Y">
+
+    <div class="form-group  required">
+      {{form.email.label(class_="control-label")}}
+            
+              {{form.email(class="form-control")}}
+            
+      </div>
+
+    <div class="form-group  required">
+      {{form.password.label(class_="control-label")}}
+            
+      {{form.password(class="form-control")}}
+      </div>
+      {% with messages = get_flashed_messages() %}
+      {% if messages%}
+      <div id="error-message">
+      <ul class="flashes">
+        {% for message in messages %}
+        <li style="color:black; list-style:none;"> {{message}} </li>
+        {%endfor%}
+      </ul>
+       </div>
+      {% endif %}
+      {% endwith %}
+
+        <input class="btn btn-default" id="submit" name="submit" type="submit" value="Log In">
+
+    </form>
+    
   <div id="seperator-container">
     <hr class="seperator left">
     <p class="seperator-word">Or</p>

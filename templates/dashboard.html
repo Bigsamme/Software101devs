@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{%extends "header.html"%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}{{user.username}} dashboard{% endblock%}
+</head>
+<body>
+    {% block content%}
+    <div class="user-articals">
+        <div class="dashboard-cover">
+            <div class="dashboard-thumbnail tab">
+                Thumbnial
+            </div>
+            <div class="dashboard-title tab">
+                Title
+            </div>
+            <div class="dashboard-views tab">
+                Views
+            </div>
+        </div>
+        {% for post in user_posts%}
+        <div id="{{post.id}}" class="dashboard-post">
+            <div class="dashboard-thumbnail tab">
+                Nothing
+            </div>
+            <div class="dashboard-title tab">
+                {{post.title}}
+            </div>
+            <div class="dashboard-views tab">
+                {{post.views}}
+            </div>
+
+        </div>
+        {% endfor%}
+
+
+
+    </div>
+    
+    {% endblock%}
+    
+</body>
+</html>

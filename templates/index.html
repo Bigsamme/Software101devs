@@ -24,7 +24,6 @@
                     <a class="profile-link" href="#">By: {{post.author.username}}</a>
                     <p class="product-short-description">{{post.description}}</p>
                     </div>
-                    
                 </div>
             </div>
             </a>
@@ -32,6 +31,7 @@
             {% endfor %}
         </div>
     </section>
+    <a  href="{{url_for('add_post')}}"> <button></button></a>
     <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
  
 
