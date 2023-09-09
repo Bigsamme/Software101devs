@@ -186,7 +186,7 @@ def add_post():
         # Then, add the new post to the database
         db.session.add(new_post)
         db.session.commit()
-        return redirect(url_for('home'))
+        return redirect(url_for('home_10'))
     
     
 @app.route('/show-post/<post_title>/<int:post_id>')
