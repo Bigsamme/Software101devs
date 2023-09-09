@@ -111,6 +111,19 @@ def image():
 @app.route("/")
 def home():
     posts = BlogPosts.query.all()
+    posts = posts[:10]
+    user = current_user
+    
+    return render_template("index.html", posts = posts,user= user)
+
+@app.route("/<int:number>")
+def home(number):
+    if number == 1:
+        posts = BlogPosts.query.all()
+        posts = posts[number * 1:number*10]
+    else:
+        posts = BlogPosts.query.all()
+        posts = posts[number * 10:10+number*10]
     user = current_user
     
     return render_template("index.html", posts = posts,user= user)
