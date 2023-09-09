@@ -117,7 +117,7 @@ def home():
     return render_template("index.html", posts = posts,user= user)
 
 @app.route("/<int:number>")
-def home(number):
+def home_10(number):
     if number == 1:
         posts = BlogPosts.query.all()
         posts = posts[number * 1:number*10]
