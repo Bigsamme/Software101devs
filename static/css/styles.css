@@ -39,7 +39,7 @@ a {
 
 
 .dashboard-title{
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 500;
   font-style: bold;
 }
@@ -319,6 +319,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 }
 
 
+
 @media only screen and (max-width:1000px){
   .main-header-nav{
     display: none;
@@ -334,6 +335,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  margin-top: 80px;
 
 }
 
@@ -763,7 +765,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   }
 
   .form {
-    margin-top: 40px;
+    margin-top: 80px;
   }
   
 
@@ -799,11 +801,38 @@ input[type="search" i]::-webkit-search-cancel-button {
     border-radius: 50%;
   }
   
+
+  .t1{
+    margin-left: 50px;
+    font-size: 20px;
+    color: #4a525d;
+  }
+
+  @media screen and (max-width:640px){
+    .t1{
+      margin-left: 0px;
+    }
+
+    .user-articals{
+    margin-left: 0;
+    }
+    
+  }
   .profile-link{
     display: inline-block;
   }
   .collection:nth-child(3) {
     grid-column: span 2;
     margin-bottom: 10px;
+  }
+
+
+  .btn-login{
+    background-color: rgb(206, 253, 135);
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 40px;
   }
   

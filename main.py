@@ -5,6 +5,8 @@ from flask_login import LoginManager, login_required, login_user,logout_user, Us
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
+from functools import wraps
+from bcrypt import gensalt, hashpw,checkpw
 import datetime as dt
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
@@ -12,7 +14,13 @@ from werkzeug.utils import secure_filename
 import random
 import string
 
-
+def proper_user_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.username != kwargs.get("username"):
+            return redirect(url_for('add_post'))
+        return func(*args, **kwargs)
+    return decorated_function
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
@@ -41,6 +49,7 @@ class User(UserMixin, db.Model):
     email = db.Column( db.String(250),nullable=True)
     password = db.Column( db.String(250))
     registration_date = db.Column(db.String(100))
+    salt = db.Column(db.String(1000))
     profile_pic = db.Column(db.String(250))
     posts = relationship("BlogPosts", back_populates="author")
     
@@ -113,25 +122,15 @@ def home():
     posts = BlogPosts.query.all()
     posts = posts[:10]
     user = current_user
-    
+    random.shuffle(posts)
     return render_template("index.html", posts = posts,user= user)
 
-@app.route("/<int:number>")
-def home_10(number):
-    if number == 1:
-        posts = BlogPosts.query.all()
-        posts = posts[number * 1:number*10]
-    else:
-        posts = BlogPosts.query.all()
-        posts = posts[number * 10:10+number*10]
-    user = current_user
-    
-    return render_template("index.html", posts = posts,user= user)
+
 
 @app.context_processor
 def base():
     form = SearchForm()
-    return dict(form = form)
+    return dict(search_form = form)
 
 @app.route("/support/about-us")
 def about_us():
@@ -147,7 +146,7 @@ def login():
         email = request.form['email']
         user = User.query.filter_by( email = email).first()
         if user:
-            if user.password == request.form['password']:
+            if checkpw(request.form["password"].encode(),user.password):
                 login_user(user)
                 return redirect(url_for('home'))
             else:
@@ -158,35 +157,37 @@ def login():
             return render_template('login.html', form = form)
             
 
-@app.route('/<username>/dashboard')
+@app.route('/users/<username>/dashboard')
+@proper_user_required
 def dashboard(username):
+    if not current_user.is_authenticated:
+        return redirect(url_for("login"))
     user = User.query.filter_by(username = username).first()
     user_posts = BlogPosts.query.filter_by(author_id = user.id).all()
     return render_template("dashboard.html", user = user,user_posts = user_posts)
 
 
-@app.route("/add-post", methods=["GET", "POST"])
+@app.route("/add_post", methods=["GET", "POST"])
 def add_post():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
     form = BlogPostForm()
     if request.method == "GET":
         return render_template('add-post.html', form = form)
-    elif request.method == "POST":
-        new_post = BlogPosts(
-            title=form.title.data,
-            description=form.description.data,
-            body=form.body.data,
-            language=form.language.data,
-            type=form.type.data,
-            views = 0,
-            author=current_user  # Set the author to the current logged-in user
-        )
+    new_post = BlogPosts(
+        title=form.title.data,
+        description=form.description.data,
+        body=form.body.data,
+        language=form.language.data,
+        type=form.type.data,
+        views = 0,
+        author=current_user  # Set the author to the current logged-in user
+    )
 
-        # Then, add the new post to the database
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for('home_10'))
+    # Then, add the new post to the database
+    db.session.add(new_post)
+    db.session.commit()
+    return redirect(url_for('home'))
     
     
 @app.route('/show-post/<post_title>/<int:post_id>')
@@ -199,13 +200,23 @@ def show_post(post_id,post_title):
 
 @app.route('/register', methods = ["GET","POST"])
 def register():
+    form = RegisterForm()
     if request.method == "GET":
-        form = RegisterForm()
         return render_template('register.html', form = form)
     elif request.method == "POST":
+        user = User.query.filter_by(username = request.form["username"]).first()
+        if user:
+            flash("this username already exist")
+            return render_template("register.html", form = form)
+        user = User.query.filter_by(email = request.form["email"]).first()
+        if user:
+            flash("A user with this email already exits")
+            return render_template("register.html", form = form)
+        salt = gensalt()
+        encoded = request.form["password"].encode('utf-8')
         user = User( username = request.form["username"],
-                    email = request.form['email'],
-                    password = request.form['password'],
+                    email = request.form["email"],
+                    password = hashpw(encoded,salt),
                     registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
         db.session.add(user)
         db.session.commit()

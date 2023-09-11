@@ -16,7 +16,7 @@
 
          <div class="main-header-search" >
             <form method="POST" action="{{url_for('search')}}">
-               {{form.hidden_tag()}}
+               {{search_form.hidden_tag()}}
             <input id="main-search-bar" placeholder="search..." type="search" name="searched"></input>
          </form>
 
@@ -45,7 +45,10 @@
                {% endif %}
                <a href="#"> <li> Contact</li></a>
                <a href="{{url_for('about_us')}}"> <li> About Us</li></a>
+               {% if current_user.is_authenticated%}
+               <a href="{{url_for('dashboard',username=current_user.username)}}"> <li> Dashboard</li></a>
                <a href="{{url_for('logout')}}"> <li> Log Out</li></a>
+               {% endif%}
             </ul>
 
          </div>
