@@ -21,27 +21,48 @@ a {
   justify-content: center;
   margin-left: 60px;
   width: 90%;
+  display: table;
 }
 
 .dashboard-post {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   justify-content: space-around;
-  border: #c6c6c6 solid 1px;
   border-radius: 5px;
-  line-height: 40px;
+  display: table-row;
+  border: 1px solid black;
+
+}
+
+#dashboard-title {
+  height: 40px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
 }
 
 .tab{
   width: 32%;
-  display: inline-block;
+  height: 40px;
+  display: table-cell;
+
+}
+
+.dashboard-cover{
+  display: table-row;
+}
+
+.b{
+  box-shadow: black 0  0 2px;
+  margin-bottom: 5px;
 }
 
 
+
 .dashboard-title{
-  font-size: 20px;
+  font-size: 12px;
   font-weight: 500;
   font-style: bold;
+
 }
 
 
