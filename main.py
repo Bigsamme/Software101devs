@@ -1,7 +1,7 @@
 from flask import Flask, render_template,url_for,request,redirect, flash
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from flask_login import LoginManager, login_required, login_user,logout_user, UserMixin,current_user
+from flask_login import LoginManager, login_required, login_user,logout_user, UserMixin,current_user,AnonymousUserMixin
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
@@ -11,7 +11,6 @@ import datetime as dt
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
-from werkzeug.utils import secure_filename
 import random
 import string
 
@@ -90,7 +89,10 @@ def home():
     posts = posts[:10]
     user = current_user
     random.shuffle(posts)
-    history = UserPostHistory.query.filter_by(user_id = current_user.id).all()
+    if user.is_authenticated:
+        history = UserPostHistory.query.filter_by(user_id = current_user.id).all()
+    else:
+        history = []
     return render_template("index.html", posts = posts,user= user, history = history)
 
 
