@@ -1,4 +1,5 @@
 Bootstrap_Flask==2.2.0
+bcrypt==4.0.1
 Flask==2.2.5
 Flask_Bootstrap==3.3.7.1
 Flask_CKEditor==0.4.6
