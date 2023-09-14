@@ -5,9 +5,9 @@ from flask_login import LoginManager, login_required, login_user,logout_user, Us
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
-from functools import wraps
-from bcrypt import gensalt, hashpw,checkpw
 import datetime as dt
+from functools import wraps
+from werkzeug.security import gen_salt, generate_password_hash,check_password_hash
 from datetime import datetime
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
@@ -49,7 +49,6 @@ class User(UserMixin, db.Model):
     email = db.Column( db.String(250),nullable=True)
     password = db.Column( db.String(250))
     registration_date = db.Column(db.String(100))
-    salt = db.Column(db.String(1000))
     profile_pic = db.Column(db.String(250))
     posts = relationship("BlogPosts", back_populates="author")
     post_history = relationship("UserPostHistory", back_populates="read_user")
@@ -116,7 +115,8 @@ def login():
         email = request.form['email']
         user = User.query.filter_by( email = email).first()
         if user:
-            if checkpw(request.form["password"].encode(),user.password):
+            password = form.password.data
+            if check_password_hash(user.password, password):
                 login_user(user)
                 return redirect(url_for('home'))
             else:
@@ -198,11 +198,11 @@ def register():
         if user:
             flash("A user with this email already exits")
             return render_template("register.html", form = form)
-        salt = gensalt()
-        encoded = request.form["password"].encode('utf-8')
+        length = random.randint(0,25)
+        encoded = request.form["password"]
         user = User( username = request.form["username"],
                     email = request.form["email"],
-                    password = hashpw(encoded,salt),
+                    password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length),
                     registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
         db.session.add(user)
         db.session.commit()
