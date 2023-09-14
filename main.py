@@ -8,6 +8,7 @@ import os
 from functools import wraps
 from bcrypt import gensalt, hashpw,checkpw
 import datetime as dt
+from datetime import datetime
 from sqlalchemy.orm import relationship
 from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
 from werkzeug.utils import secure_filename
@@ -52,9 +53,17 @@ class User(UserMixin, db.Model):
     salt = db.Column(db.String(1000))
     profile_pic = db.Column(db.String(250))
     posts = relationship("BlogPosts", back_populates="author")
+    post_history = relationship("UserPostHistory", back_populates="read_user")
     
-    
+class UserPostHistory(db.Model):
+    __tablename__ = "user_post_history"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
+    date_read = db.Column(db.DateTime, default=datetime.utcnow)
 
+    read_user = relationship("User", back_populates="post_history")
+    post = relationship("BlogPosts", back_populates="read_by_users")
 class BlogPosts(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column( db.Integer, primary_key = True)
@@ -63,59 +72,17 @@ class BlogPosts(db.Model):
     body = db.Column( db.Text)
     language = db.Column( db.String(250))
     type = db.Column( db.String(250))
+    thumbnail = db.Column(db.String)
     views = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
+    read_by_users = relationship("UserPostHistory", back_populates="post")
 
 
 with app.app_context():
     db.create_all()
 
 
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-           
-@app.route('/image', methods = ["GET","POST"])  
-def image():
-    lower_letters = string.ascii_lowercase
-    upper_letters = string.ascii_uppercase
-    file_path = ""
-    for letter in range(50):
-        file_path += random.choice(upper_letters)
-        file_path += random.choice(lower_letters)
-    form =  FileSubmit()
-    if request.method =="GET":
-        return render_template('login.html', form = form)
-    if request.method == 'POST':
-        # check if the post request has the file part
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        # If the user does not select a file, the browser submits an
-        # empty file without a filename.
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            type_ = file.filename.split(".")[1]
-            file_name = '.'.join([file_path,type_])
-            user = User.query.filter_by(email = current_user.email).first()
-            user.profile_pic = file_name
-            db.session.add(user)
-            db.session.commit()
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
-            return redirect(url_for('home'))
-    return '''
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
 
 @app.route("/")
 def home():
@@ -123,7 +90,8 @@ def home():
     posts = posts[:10]
     user = current_user
     random.shuffle(posts)
-    return render_template("index.html", posts = posts,user= user)
+    history = UserPostHistory.query.filter_by(user_id = current_user.id).all()
+    return render_template("index.html", posts = posts,user= user, history = history)
 
 
 
@@ -174,15 +142,28 @@ def add_post():
     form = BlogPostForm()
     if request.method == "GET":
         return render_template('add-post.html', form = form)
+    
+    lower_letters = string.ascii_lowercase
+    upper_letters = string.ascii_uppercase
+    file_path = ""
+    for letter in range(50):
+        file_path += random.choice(upper_letters)
+        file_path += random.choice(lower_letters)
+    file = request.files['thumbnail']
+    type_ = file.filename.split(".")[1]
+    file_name = '.'.join([file_path,type_])
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
     new_post = BlogPosts(
         title=form.title.data,
         description=form.description.data,
         body=form.body.data,
         language=form.language.data,
+        thumbnail = file_name,
         type=form.type.data,
         views = 0,
         author=current_user  # Set the author to the current logged-in user
     )
+
 
     # Then, add the new post to the database
     db.session.add(new_post)
@@ -194,6 +175,9 @@ def add_post():
 def show_post(post_id,post_title):
     post = BlogPosts.query.filter_by(id = post_id).first()
     post.views = post.views + 1
+    user = current_user
+    read_history_entry = UserPostHistory(read_user=user, post=post)
+    db.session.add(read_history_entry)
     db.session.add(post)
     db.session.commit()
     return render_template("post.html", post = post)

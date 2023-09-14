@@ -14,6 +14,7 @@ class BlogPostForm(FlaskForm):
     title = StringField("Post Title")
     description = StringField("Post Description")
     language = StringField("Post language")
+    thumbnail = FileField("Thumbnail",validators=[InputRequired()])
     type  = StringField("Post type")
     body = CKEditorField("Blog Content")
     submit = SubmitField("Submit")

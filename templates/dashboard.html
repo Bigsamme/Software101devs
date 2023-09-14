@@ -25,13 +25,13 @@
         {% for post in user_posts%}
         <div id="{{post.id}}" class="dashboard-post b t">
             <div class="dashboard-thumbnail tab">
-                Nothing
+                <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb-dash" alt="">
             </div>
             <div class="dashboard-title tab">
-                <div id="dashboard-title">{{post.title}}</div>
+                <div id="c">{{post.title}}</div>
             </div>
             <div class="dashboard-views tab">
-                {{post.views}}
+                <div id="c">{{post.views}}</div>
             </div>
 
         </div>

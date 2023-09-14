@@ -33,17 +33,13 @@ a {
 
 }
 
-#dashboard-title {
-  height: 40px;
-  text-overflow: ellipsis;
-  overflow: hidden;
 
-}
 
 .tab{
   width: 32%;
   height: 40px;
   display: table-cell;
+  vertical-align: top;
 
 }
 
@@ -53,16 +49,81 @@ a {
 
 .b{
   box-shadow: black 0  0 2px;
-  margin-bottom: 5px;
+  margin-bottom: 50px;
 }
 
+
+
+.post-thumb {
+  width: 25.3%;
+  height: auto;
+  display: block;
+  max-width: 180px;
+  max-height: 145px;
+  margin: 10px 1% 10px 1%;
+}
+
+.post-thumb-dash {
+  width: 120px;
+  height: 120px;
+  margin: 20px;
+}
+
+#c {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+
+
+.post-container {
+  background-color:#e8eaed ;
+  display: flex;
+  flex-wrap: wrap;
+  height: 165px;
+  margin: 0 10px 5px 10px;
+  border-radius: 5px;
+}
+
+.post-description {
+  margin-top: 10px;
+  color: #4a525d;
+  font-size: 18px;
+}
+
+@media screen and (max-width: 550px) {
+  .post-title{
+    font-size: 18px;
+  }
+  .post-description {
+
+    font-size: 12px;
+  }
+  
+  
+}
+
+.post-info{
+  display: block;
+  width: 70.7%;
+  font-size: 24px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 2%;
+  margin-top: 10px;
+
+}
+
+.post-title{
+  height: 55px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
 .dashboard-title{
   font-size: 12px;
   font-weight: 500;
-  font-style: bold;
-
 }
 
 
