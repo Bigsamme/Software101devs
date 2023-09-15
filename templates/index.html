@@ -5,34 +5,12 @@
 
 <body>
     {% block content%}
-    <section class="product"> 
-        <h2 class="product-category">best selling</h2>
-        <div class="product-container">
-            <button class="pre-btn"><img src="../static/images/favicon.ico" alt=""></button>
-            <button class="nxt-btn"><img src="../static/images/favicon.ico" alt=""></button>
-            {% for post in posts %}
-            <a href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}" class="blog-home-link">
-            <div class="product-card">
-                <div class="product-image">
-                     
-                    <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}" class="product-thumb" alt="">
-                </div>
-                <div class="product-info">
-                    <h2 class="product-brand">{{post.title}}</h2>
-                    <div class="profile-links">
-                    <img class="post-profile-pic" src="{{ url_for('static', filename='images/profile_pics/{}'.format(post.author.profile_pic)) }}">
-                    <a class="profile-link" href="#">By: {{post.author.username}}</a>
-                    <p class="product-short-description">{{post.description}}</p>
-                    </div>
-                </div>
-            </div>
-            </a>
 
-            {% endfor %}
-        </div>
-    </section>
+    <section class="explore">
     {% for post in posts%}
+    <a id="post-click" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
     <div class="post-container">
+       
         <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb" alt="">
         <div class="post-info">
         <div class="post-title">
@@ -45,11 +23,32 @@
         </div>
      </div>
     </div>
+    </a>
     {% endfor%}
+    </section>
+    
     {% for post in history%}
     <div style="display:block">{{post.post.title}}
     {{post.date_read.day}}
     </div>
+    {% endfor%}
+    {% for post in posts%}
+    <a id="post-click" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
+    <div class="post-container">
+       
+        <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb" alt="">
+        <div class="post-info">
+        <div class="post-title">
+            {{post.title}}
+     
+        </div>
+        <div class="post-description">
+            {{post.description}}
+      
+        </div>
+     </div>
+    </div>
+    </a>
     {% endfor%}
     <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
 

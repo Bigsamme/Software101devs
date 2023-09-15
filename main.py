@@ -173,7 +173,7 @@ def add_post():
     return redirect(url_for('home'))
     
     
-@app.route('/show-post/<post_title>/<int:post_id>')
+@app.route('/show_post/<post_title>/<int:post_id>')
 def show_post(post_id,post_title):
     post = BlogPosts.query.filter_by(id = post_id).first()
     post.views = post.views + 1

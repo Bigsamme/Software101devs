@@ -76,6 +76,13 @@ a {
 
 
 
+.explore {
+  display: flex;
+  margin-left: 2vw;
+  flex-wrap: wrap;
+}
+
+
 .post-container {
   background-color:#e8eaed ;
   display: flex;
@@ -83,6 +90,16 @@ a {
   height: 165px;
   margin: 0 10px 5px 10px;
   border-radius: 5px;
+  width:450px;
+}
+
+.post-container a{
+  width: 25.3%;
+  height: auto;
+  display: block;
+  max-width: 180px;
+  max-height: 145px;
+  margin: 10px 1% 10px 1%;
 }
 
 .post-description {
@@ -91,7 +108,25 @@ a {
   font-size: 18px;
 }
 
-@media screen and (max-width: 550px) {
+@media screen and (max-width: 600px) {
+  .explore{
+    display: block;
+  }
+  
+  
+}
+
+@media  screen and (max-width:500px) {
+
+  .post-container {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+    box-shadow: #0e967b 0px 0px 3px;
+  }
+  .explore{
+    margin-left: 0;
+  }
   .post-title{
     font-size: 18px;
   }
@@ -99,7 +134,6 @@ a {
 
     font-size: 12px;
   }
-  
   
 }
 
