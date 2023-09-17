@@ -5,12 +5,13 @@ from flask_login import LoginManager, login_required, login_user,logout_user, Us
 from flask_sqlalchemy import SQLAlchemy
 import gunicorn
 import os
+from smtplib import SMTP
 import datetime as dt
 from functools import wraps
 from werkzeug.security import gen_salt, generate_password_hash,check_password_hash
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, FileSubmit
+from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, ContactForm
 import random
 import string
 
@@ -104,6 +105,32 @@ def base():
 @app.route("/support/about-us")
 def about_us():
     return render_template('about-us.html')
+
+@app.route('/register', methods = ["GET","POST"])
+def register():
+    form = RegisterForm()
+    if request.method == "GET":
+        return render_template('register.html', form = form)
+    elif request.method == "POST":
+        user = User.query.filter_by(username = request.form["username"]).first()
+        if user:
+            flash("this username already exist")
+            return render_template("register.html", form = form)
+        user = User.query.filter_by(email = request.form["email"]).first()
+        if user:
+            flash("A user with this email already exits")
+            return render_template("register.html", form = form)
+        length = random.randint(0,25)
+        encoded = request.form["password"]
+        user = User( username = request.form["username"],
+                    email = request.form["email"],
+                    password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length),
+                    registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
+        db.session.add(user)
+        db.session.commit()
+        login_user(user)
+        return redirect(url_for('home'))
+    
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -136,6 +163,24 @@ def dashboard(username):
     user_posts = BlogPosts.query.filter_by(author_id = user.id).all()
     return render_template("dashboard.html", user = user,user_posts = user_posts)
 
+@app.route("/support/contact", methods = ["GET","POST"])
+def contact():
+    form = ContactForm()
+    if request.method == "GET":
+        if not current_user.is_authenticated:
+            return render_template("contact.html", form  = form)
+        form.email.data = current_user.email
+        return render_template("contact.html", form = form)
+    else:
+        email = request.form["email"]
+        subject = request.form["subject"]
+        message = request.form["message"]
+        with SMTP("smtp.gmail.com", port=587) as connection:
+            connection.starttls()
+            connection.login("samuelwhitehall@gmail.com", os.environ.get("EMAIL_PASSWORD"))
+            connection.sendmail("samuelwhitehall@gmail.com", "samuelwhitehall@gmail.com", msg=f"Subject: {subject}\n\n From \n {email} Message : {message}")
+        return redirect(url_for("home"))
+        
 
 @app.route("/add_post", methods=["GET", "POST"])
 def add_post():
@@ -179,35 +224,13 @@ def show_post(post_id,post_title):
     post.views = post.views + 1
     user = current_user
     read_history_entry = UserPostHistory(read_user=user, post=post)
-    db.session.add(read_history_entry)
-    db.session.add(post)
+    if user.is_authenticated:
+        read_history_entry = UserPostHistory(read_user=user, post=post)
+        db.session.add(read_history_entry)
     db.session.commit()
     return render_template("post.html", post = post)
 
-@app.route('/register', methods = ["GET","POST"])
-def register():
-    form = RegisterForm()
-    if request.method == "GET":
-        return render_template('register.html', form = form)
-    elif request.method == "POST":
-        user = User.query.filter_by(username = request.form["username"]).first()
-        if user:
-            flash("this username already exist")
-            return render_template("register.html", form = form)
-        user = User.query.filter_by(email = request.form["email"]).first()
-        if user:
-            flash("A user with this email already exits")
-            return render_template("register.html", form = form)
-        length = random.randint(0,25)
-        encoded = request.form["password"]
-        user = User( username = request.form["username"],
-                    email = request.form["email"],
-                    password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length),
-                    registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
-        db.session.add(user)
-        db.session.commit()
-        login_user(user)
-        return redirect(url_for('home'))
+
     
 @app.route('/search', methods=["POST"])
 def search():

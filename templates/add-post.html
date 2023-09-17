@@ -1,66 +1,14 @@
 {% from "bootstrap5/form.html" import render_form %}
-<!DOCTYPE html>
-<html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>{%block title%}{%endblock%}</title>
-      <link rel="icon" type="image/x-ion" href="{{url_for('static',filename='images/favicon.ico')}}">
-      <link rel="stylesheet" href="{{url_for('static', filename = 'css/styles.css')}}">
-   </head>
-   <body>
-      <header class="main-header">
-         <div class="main-header-logo">
-            <a href="{{url_for('home')}}"><img src="{{url_for('static', filename='images/favicon.ico')}}" alt="Logo"></a>
+{% extends "header.html"%}
 
-         </div>
-
-         <div class="main-header-search" >
-            <form method="POST" action="{{url_for('search')}}">
-               {{search_form.hidden_tag()}}
-            <input id="main-search-bar" placeholder="search..." type="search" name="searched"></input>
-         </form>
-
-         </div>
-         <nav class="main-header-nav">
-            <ul>
-
-               {% if not current_user.is_authenticated%}
-               <a href="{{url_for('login')}}"> <li> login</li></a>
-               <a href="{{url_for('register')}}"> <li> register</li></a>
-               {% endif %}
-               <a href="{{url_for('about_us')}}"> <li> About Us</li></a>
-               <a href="#"> <li> Contact Us</li></a>
-               <a href="{{url_for('logout')}}"> <li> Log Out</li></a>
-            </ul>
-
-         </nav>
-         <div id="ham" onclick="toggleMobileMenu(this)">
-            <div class="bar1"></div>
-            <div class="bar2"></div>
-            <div class="bar3"></div>
-            <ul class="mobile-menu">
-               {% if not current_user.is_authenticated%}
-               <a href="{{url_for('login')}}"> <li> login</li></a>
-               <a href="{{url_for('register')}}"> <li> register</li></a>
-               {% endif %}
-               <a href="#"> <li> Contact</li></a>
-               <a href="{{url_for('about_us')}}"> <li> About Us</li></a>
-               {% if current_user.is_authenticated%}
-               <a href="{{url_for('dashboard',username=current_user.username)}}"> <li> Dashboard</li></a>
-               <a href="{{url_for('logout')}}"> <li> Log Out</li></a>
-               {% endif%}
-            </ul>
-
-         </div>
-
-      </header>
-      <script src="{{url_for('static', filename='scripts/mobile-menu.js')}}"></script>
     {% block content%} 
+    <div id="login-container">
+      <div id="contact-form">
         {{ ckeditor.load() }}
-        {{ ckeditor.config(name='content') }}
+        {{ ckeditor.config(name='add_post') }}
         {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
-
+      </div>
+   </div>
     {% endblock%}
 
 </body>

@@ -28,7 +28,10 @@ class LoginForm(FlaskForm):
 class SearchForm(FlaskForm):
     searched = StringField("Searched", validators=[InputRequired()])
     submit = SubmitField("Submit")
+
     
-class FileSubmit(FlaskForm):
-    file = FileField("FileField")
-    submit = SubmitField("submit")
+class ContactForm(FlaskForm):
+    email = EmailField("Email", validators=[InputRequired()])
+    subject = StringField("Subject",validators=[InputRequired()])
+    message = CKEditorField("Message", validators=[InputRequired()])
+    submit = SubmitField("Send")

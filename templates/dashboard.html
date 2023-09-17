@@ -8,8 +8,11 @@
 </head>
 <body>
     {% block content%}
-    <a href="{{url_for('add_post')}}"> <button class="btn-login">ADD POST</button></a>
-    <div class="dashboard-head t1"><h1>Posts</h1></div>
+    <div class="dashboard-head t1">
+        <h1>Posts</h1>
+        <a href="{{url_for('add_post')}}"> <button id="add">ADD POST</button></a>
+    </div>
+
     <div class="user-articals">
         <div class="dashboard-cover">
             <div class="tab">
