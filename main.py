@@ -124,7 +124,7 @@ def base():
     form = SearchForm()
     return dict(search_form = form)
 
-@app.route("/support/about-us")
+@app.route("/support/about-us/lo")
 def about_us():
     return render_template('about-us.html')
 
