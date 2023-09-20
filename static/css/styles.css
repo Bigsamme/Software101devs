@@ -748,6 +748,8 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 
 
+
+
   @media screen and (max-width: 680px) {
     .blog-page-container{
       margin: 40px;
@@ -765,11 +767,6 @@ input[type="search" i]::-webkit-search-cancel-button {
       align-self: center;
       max-width: 600px;
     }
-    
-    .blog-page-content img{
-      max-width: 100%;
-      height: auto !important;
-    }
   }
   
 
@@ -780,6 +777,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 
   .blog-page-content p{
     font-size: 20px;
+    overflow: hidden;
 
  
  }

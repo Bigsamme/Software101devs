@@ -52,7 +52,23 @@ class User(UserMixin, db.Model):
     registration_date = db.Column(db.String(100))
     profile_pic = db.Column(db.String(250))
     posts = relationship("BlogPosts", back_populates="author")
+    draft_posts = relationship("DraftPosts", back_populates="author")
     post_history = relationship("UserPostHistory", back_populates="read_user")
+    
+class DraftPosts(db.Model):
+    __tablename__  = "draft_posts"
+    id = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String)
+    description = db.Column( db. String(250))
+    body = db.Column( db.Text)
+    language = db.Column( db.String(250))
+    type = db.Column( db.String(250))
+    thumbnail = db.Column(db.String)
+    views = db.Column(db.Integer)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author = relationship("User", back_populates="draft_posts")
+
+
     
 class UserPostHistory(db.Model):
     __tablename__ = "user_post_history"
@@ -63,6 +79,9 @@ class UserPostHistory(db.Model):
 
     read_user = relationship("User", back_populates="post_history")
     post = relationship("BlogPosts", back_populates="read_by_users")
+
+    
+
 class BlogPosts(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column( db.Integer, primary_key = True)
@@ -76,19 +95,22 @@ class BlogPosts(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
     read_by_users = relationship("UserPostHistory", back_populates="post")
+    
+
 
 
 with app.app_context():
     db.create_all()
-
+    
 
 
 @app.route("/")
 def home():
     posts = BlogPosts.query.all()
-    posts = posts[:10]
+
     user = current_user
     random.shuffle(posts)
+    posts = posts[:10]
     if user.is_authenticated:
         history = UserPostHistory.query.filter_by(user_id = current_user.id).all()
     else:
@@ -223,7 +245,6 @@ def show_post(post_id,post_title):
     post = BlogPosts.query.filter_by(id = post_id).first()
     post.views = post.views + 1
     user = current_user
-    read_history_entry = UserPostHistory(read_user=user, post=post)
     if user.is_authenticated:
         read_history_entry = UserPostHistory(read_user=user, post=post)
         db.session.add(read_history_entry)
