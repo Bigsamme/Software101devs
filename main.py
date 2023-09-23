@@ -23,10 +23,13 @@ def proper_user_required(func):
         return func(*args, **kwargs)
     return decorated_function
 
+# def owner_required(func):
+#     @wraps(func)
+#     def decorated_func(*args, **kwargs):
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 app.config['UPLOAD_FOLDER'] = "static/images/profile_pics"
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
@@ -38,6 +41,7 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+#logs in the current user
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.filter_by(id = user_id).first()
@@ -55,6 +59,8 @@ class User(UserMixin, db.Model):
     draft_posts = relationship("DraftPosts", back_populates="author")
     post_history = relationship("UserPostHistory", back_populates="read_user")
     
+    
+# self explanatory
 class DraftPosts(db.Model):
     __tablename__  = "draft_posts"
     id = db.Column(db.Integer, primary_key = True)
@@ -69,7 +75,7 @@ class DraftPosts(db.Model):
     author = relationship("User", back_populates="draft_posts")
 
 
-    
+# table for articles users have read
 class UserPostHistory(db.Model):
     __tablename__ = "user_post_history"
     id = db.Column(db.Integer, primary_key=True)
@@ -81,7 +87,8 @@ class UserPostHistory(db.Model):
     post = relationship("BlogPosts", back_populates="read_by_users")
 
     
-
+    
+#table for all data related to User posted articles 
 class BlogPosts(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column( db.Integer, primary_key = True)
@@ -104,27 +111,30 @@ with app.app_context():
     
 
 
-@app.route("/")
-def home():
-    posts = BlogPosts.query.all()
 
-    user = current_user
-    random.shuffle(posts)
-    posts = posts[:10]
-    if user.is_authenticated:
-        history = UserPostHistory.query.filter_by(user_id = current_user.id).all()
-    else:
-        history = []
-    return render_template("index.html", posts = posts,user= user, history = history)
-
-
-
+# Makes the search base in header.html work
 @app.context_processor
 def base():
     form = SearchForm()
     return dict(search_form = form)
 
-@app.route("/support/about-us/lo")
+
+
+#All of the roots for the visual side of the website below
+
+@app.route("/")
+def home():
+    posts = BlogPosts.query.all()
+    user = current_user
+    data = posts
+    random.shuffle(posts)
+    #returns  10 random posts so the website loads faster
+    posts = posts[:10]
+    return render_template("index.html", posts = posts,user= user, data = data)
+
+
+
+@app.route("/support/about-us/")
 def about_us():
     return render_template('about-us.html')
 
@@ -144,43 +154,49 @@ def register():
             return render_template("register.html", form = form)
         length = random.randint(0,25)
         encoded = request.form["password"]
+        #uploads the user information to the users table 
         user = User( username = request.form["username"],
                     email = request.form["email"],
                     password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length),
                     registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
         db.session.add(user)
         db.session.commit()
-        login_user(user)
+        login_user(user) 
         return redirect(url_for('home'))
     
 @app.route('/login', methods=["GET", "POST"])
 def login():
+    #IF the user is already logged in redirects them to the home page
     if current_user.is_authenticated:
         return redirect(url_for("home"))
     form = LoginForm()
     if request.method == "GET":
         return render_template('login.html',form = form)
-    else:
-        email = request.form['email']
-        user = User.query.filter_by( email = email).first()
-        if user:
-            password = form.password.data
-            if check_password_hash(user.password, password):
-                login_user(user)
-                return redirect(url_for('home'))
-            else:
-                flash("Password is incorrect", "error")
-                return render_template("login.html", form = form)
-        else:
-            flash("A User with this email not found", "error")
-            return render_template('login.html', form = form)
-            
+    
+    #Tries to log the user in if request method is not get
+    email = request.form['email']
+    user = User.query.filter_by( email = email).first()
+    if not user:
+        flash("A User with this email not found", "error")
+        return  render_template('login.html', form = form)
+        
+    password = form.password.data
+    if not check_password_hash(user.password, password):
+        flash("Password is incorrect", "error")
+        return render_template("login.html", form = form)
+    
+    #The data provided by the user was all correct logs them in
+    login_user(user)
+    return redirect(url_for('home'))
 
-@app.route('/users/<username>/dashboard')
-@proper_user_required
+@app.route('/users/dashboard/<username>')
+@proper_user_required #Makes sure users can't access other peoples dashboard
 def dashboard(username):
+    # Redirects none logged in users to the login page
     if not current_user.is_authenticated:
         return redirect(url_for("login"))
+    
+    # returns the current users dashboard
     user = User.query.filter_by(username = username).first()
     user_posts = BlogPosts.query.filter_by(author_id = user.id).all()
     return render_template("dashboard.html", user = user,user_posts = user_posts)
@@ -189,9 +205,10 @@ def dashboard(username):
 def contact():
     form = ContactForm()
     if request.method == "GET":
+        
         if not current_user.is_authenticated:
             return render_template("contact.html", form  = form)
-        form.email.data = current_user.email
+        form.email.data = current_user.email # If the user is already logged in populates the email field
         return render_template("contact.html", form = form)
     else:
         email = request.form["email"]
@@ -212,16 +229,21 @@ def add_post():
     if request.method == "GET":
         return render_template('add-post.html', form = form)
     
+    
+    #Generates a random post thumbnail filepath with the users username attached
     lower_letters = string.ascii_lowercase
     upper_letters = string.ascii_uppercase
     file_path = ""
     for letter in range(50):
         file_path += random.choice(upper_letters)
         file_path += random.choice(lower_letters)
+    file_path += str(current_user.id) #Makes it so there is almost no chance of duplicate.
     file = request.files['thumbnail']
     type_ = file.filename.split(".")[1]
     file_name = '.'.join([file_path,type_])
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+    
+    
     new_post = BlogPosts(
         title=form.title.data,
         description=form.description.data,
@@ -241,14 +263,18 @@ def add_post():
     
     
 @app.route('/show_post/<post_title>/<int:post_id>')
-def show_post(post_id,post_title):
+def show_post(post_id,post_title): #has the post just so its in the url 
     post = BlogPosts.query.filter_by(id = post_id).first()
-    post.views = post.views + 1
+    if current_user.is_authenticated:
+        if current_user.id != post.author.id: #makes sure the author can't add views to their own posts
+            post.views += 1 #adds to the post views
+    else:
+        post.views += 1 #adds to the post views
     user = current_user
-    if user.is_authenticated:
+    if user.is_authenticated: #If the user is logged in adds the post to the read history
         read_history_entry = UserPostHistory(read_user=user, post=post)
-        db.session.add(read_history_entry)
-    db.session.commit()
+        db.session.add(read_history_entry)#Add the user read history
+    db.session.commit() #Commits the changes to the data base
     return render_template("post.html", post = post)
 
 
@@ -259,12 +285,13 @@ def search():
     posts = BlogPosts.query
     if form.validate_on_submit():
         searched = form.searched.data
+        #search's the content of the article
         posts = posts.filter(BlogPosts.body.like('%' + searched + "%"))
-        posts = posts.order_by(BlogPosts.title).all()
+        posts = posts.all()
         if posts == []:
             posts = BlogPosts.query.all()
         return render_template("index.html",posts = posts)
-    return "Hello"
+    return redirect(url_for("home"))
     
 @app.route('/logout')
 def logout():

@@ -5,8 +5,7 @@
 
 <body>
     {% block content%}
-
-    <section class="explore">
+ <section class="explore" id="ex">
     {% for post in posts%}
     <a id="post-click" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
     <div class="post-container">
@@ -30,13 +29,12 @@
     </section>
     
 
-
+    <script type="text/javascript">
+        var user = "{{user.username}}"
+    </script>
     <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
 
- 
-
-        
-    <script src="../static/scripts/slider.js"> </script>
+    <script language="JavaScript" type="text/javascript" src="url_for('static, filename='scripts/mobile-menu.js')"> </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
