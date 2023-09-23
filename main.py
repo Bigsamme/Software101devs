@@ -134,7 +134,7 @@ def home():
 
 
 
-@app.route("/support/about-us/")
+@app.route("/support/about_us/")
 def about_us():
     return render_template('about-us.html')
 
