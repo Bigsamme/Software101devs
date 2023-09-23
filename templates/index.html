@@ -7,7 +7,7 @@
     {% block content%}
  <section class="explore" id="ex">
     {% for post in posts%}
-    <a id="post-click" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
+    <a class="post" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
     <div class="post-container">
        
         <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb" alt="">
@@ -29,9 +29,7 @@
     </section>
     
 
-    <script type="text/javascript">
-        var user = "{{user.username}}"
-    </script>
+
     <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
 
     <script language="JavaScript" type="text/javascript" src="url_for('static, filename='scripts/mobile-menu.js')"> </script>

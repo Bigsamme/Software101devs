@@ -154,7 +154,7 @@ a {
     width: 100%;
   }
 
-  #post-click{
+  .post{
     width: 100%;
   }
 }
@@ -164,7 +164,7 @@ a {
     width:97%;
   }
 
-  #post-click{
+  .post{
     width: 50%;
   }
 }
