@@ -18,6 +18,8 @@ from functions import app,create_file_name
 
 
 
+
+
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
