@@ -1,0 +1,21 @@
+{% extends "header.html"%}
+{% from "bootstrap5/form.html" import render_form %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title%} Contact {% endblock%}
+</head>
+<body>
+    {% block content%}
+    <div id="login-container">
+        <div id="contact-form">
+    {{ckeditor.load()}}
+    {{ckeditor.config(name = "message")}}
+    {{render_form(form, novalidate = True, button_map={"submit":"primary"})}}
+        </div>
+    </div>
+    {% endblock%}
+    
+</body>
+</html>

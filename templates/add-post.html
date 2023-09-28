@@ -1,0 +1,15 @@
+{% from "bootstrap5/form.html" import render_form %}
+{% extends "header.html"%}
+
+    {% block content%} 
+    <div id="login-container">
+      <div id="contact-form">
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='add_post') }}
+        {{ render_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+      </div>
+   </div>
+    {% endblock%}
+
+</body>
+</html>

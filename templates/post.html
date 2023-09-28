@@ -1,32 +1,38 @@
+
 {% extends "header.html" %}
 
-{% block title%} Post title  {% endblock %}
 
-{% block content %} 
-    <div class="blog-page-img">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg/640px-Gutenberg_Bible%2C_Lenox_Copy%2C_New_York_Public_Library%2C_2009._Pic_01.jpg">
+<html lang="en">
+    {% block title%} {{post.title}} {% endblock %}
 
-    </div>
-
-
-    <div class="blog-page-content">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Aenean sed adipiscing diam donec adipiscing tristique risus. Lobortis mattis aliquam faucibus purus in massa tempor. Mauris in aliquam sem fringilla ut morbi. Molestie at elementum eu facilisis sed. Sem viverra aliquet eget sit amet. At consectetur lorem donec massa sapien. Mi quis hendrerit dolor magna eget est lorem ipsum. Orci dapibus ultrices in iaculis nunc sed augue. Arcu bibendum at varius vel pharetra. Sit amet consectetur adipiscing elit duis tristique sollicitudin. Nunc vel risus commodo viverra maecenas accumsan lacus. Porttitor lacus luctus accumsan tortor posuere ac ut consequat. Malesuada proin libero nunc consequat interdum varius sit. Tincidunt arcu non sodales neque. Ultrices mi tempus imperdiet nulla. Fames ac turpis egestas integer eget aliquet. Aliquam faucibus purus in massa. Volutpat odio facilisis mauris sit. Ultrices in iaculis nunc sed augue lacus viverra.
-
-        Elit pellentesque habitant morbi tristique senectus. Dictum non consectetur a erat nam. Commodo ullamcorper a lacus vestibulum sed. Libero volutpat sed cras ornare arcu dui. Felis imperdiet proin fermentum leo vel orci porta. Justo eget magna fermentum iaculis eu non diam. Ullamcorper velit sed ullamcorper morbi tincidunt ornare. Lectus quam id leo in. Arcu non sodales neque sodales ut etiam. Sed felis eget velit aliquet sagittis. Aenean sed adipiscing diam donec adipiscing tristique risus. Aenean pharetra magna ac placerat vestibulum. Proin fermentum leo vel orci porta non. Orci nulla pellentesque dignissim enim sit amet. Pulvinar pellentesque habitant morbi tristique senectus et. Euismod lacinia at quis risus. Arcu bibendum at varius vel pharetra vel turpis.
-
-        Vulputate sapien nec sagittis aliquam. Id leo in vitae turpis massa sed elementum tempus. Vel fringilla est ullamcorper eget nulla. Diam volutpat commodo sed egestas egestas fringilla. Morbi quis commodo odio aenean. Mauris rhoncus aenean vel elit scelerisque mauris. Id velit ut tortor pretium. A erat nam at lectus urna duis. Nisl nisi scelerisque eu ultrices vitae. Pellentesque elit eget gravida cum. Vel orci porta non pulvinar neque laoreet suspendisse interdum. Quis vel eros donec ac. Suspendisse ultrices gravida dictum fusce ut placerat orci nulla. Aenean sed adipiscing diam donec adipiscing tristique risus nec feugiat. Molestie ac feugiat sed lectus vestibulum mattis ullamcorper.
-
-        Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Id aliquet risus feugiat in. Integer vitae justo eget magna fermentum iaculis. Viverra vitae congue eu consequat ac felis donec. Ante metus dictum at tempor commodo ullamcorper. Faucibus purus in massa tempor. Netus et malesuada fames ac turpis egestas integer eget. Magna sit amet purus gravida. Ipsum nunc aliquet bibendum enim facilisis. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Tincidunt tortor aliquam nulla facilisi cras. Congue quisque egestas diam in arcu.
-
-        Fermentum iaculis eu non diam phasellus vestibulum lorem. Sed vulputate mi sit amet. Viverra justo nec ultrices dui sapien eget mi. Aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc. Vestibulum mattis ullamcorper velit sed ullamcorper morbi tincidunt. Egestas integer eget aliquet nibh praesent tristique magna. Et netus et malesuada fames. Pellentesque adipiscing commodo elit at imperdiet dui. Amet consectetur adipiscing elit duis tristique sollicitudin nibh sit. Hac habitasse platea dictumst vestibulum rhoncus. Quisque sagittis purus sit amet volutpat consequat mauris nunc. Porttitor massa id neque aliquam vestibulum morbi.
-
-    </div>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+<body>
+    {% block content %} 
+    <artical class="blog-page-article">
+        <div class="blog-page-container">
+            <div class="blog-page-content">
+                {{post.body|safe}}
+            </div>
+        </div>
+    </artical>
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+     <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+ 
+     gtag('config', 'G-M2F5L1915F');
+     </script>
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4340214129501362"
+     crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-4340214129501362"
+        data-ad-slot="8735335838"></ins>
     <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-M2F5L1915F');
+        (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
-{% endblock%}
+ {% endblock%}
+    
+</body>
+</html>
