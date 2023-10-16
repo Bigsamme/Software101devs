@@ -1,0 +1,60 @@
+{% extends "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+  
+
+  {% block content%}
+  <div id="login-container">
+  <div id="login-form">
+    <div class="login-title"><h3>Log In</h3></div>
+  
+    <form action="" method="post" role="form">
+      <input id="csrf_token" name="csrf_token" type="hidden" value="IjRjNWRiMDZmZGE1NDc0ZDM0ZTA4Mzc1Mzg5NjlmZDlmMDdjOTVlMTgi.ZPruig.rLzDXKnBkPXf0OL_KlDNH5Amf6Y">
+
+    <div class="form-group  required">
+      {{form.email.label(class_="control-label")}}
+            
+              {{form.email(class="form-control")}}
+            
+      </div>
+
+    <div class="form-group  required">
+      {{form.password.label(class_="control-label")}}
+            
+      {{form.password(class="form-control")}}
+      </div>
+      {% with messages = get_flashed_messages() %}
+      {% if messages%}
+      <div id="error-message">
+      <ul class="flashes">
+        {% for message in messages %}
+        <li style="color:black; list-style:none;"> {{message}} </li>
+        {%endfor%}
+      </ul>
+       </div>
+      {% endif %}
+      {% endwith %}
+
+        <input class="btn btn-default" id="submit" name="submit" type="submit" value="Log In">
+
+    </form>
+    
+  <div id="seperator-container">
+    <hr class="seperator left">
+    <p class="seperator-word">Or</p>
+    <hr class="seperator right">
+  </div>
+  </div>
+  
+
+    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'G-M2F5L1915F');
+    </script>
+  </div>
+{% endblock %}

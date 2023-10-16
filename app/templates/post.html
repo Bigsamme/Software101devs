@@ -1,0 +1,38 @@
+
+{% extends "header.html" %}
+
+
+<html lang="en">
+    {% block title%} {{post.title}} {% endblock %}
+
+<body>
+    {% block content %} 
+    <artical class="blog-page-article">
+        <div class="blog-page-container">
+            <div class="blog-page-content">
+                {{post.body|safe}}
+            </div>
+        </div>
+    </artical>
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+     <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+ 
+     gtag('config', 'G-M2F5L1915F');
+     </script>
+     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4340214129501362"
+     crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+        style="display:block"
+        data-ad-format="autorelaxed"
+        data-ad-client="ca-pub-4340214129501362"
+        data-ad-slot="8735335838"></ins>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+ {% endblock%}
+    
+</body>
+</html>

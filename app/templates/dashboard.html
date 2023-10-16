@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{%extends "header.html"%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}{{user.username}} dashboard{% endblock%}
+</head>
+<body>
+    {% block content%}
+    <div class="dashboard-head t1">
+        <h1>Posts</h1>
+        <a href="{{url_for('add_post')}}"> <button id="add">ADD POST</button></a>
+    </div>
+
+    <div class="user-articals">
+        <div class="dashboard-cover">
+            <div class="tab">
+                Thumbnial
+            </div>
+            <div class="tab">
+                Title
+            </div>
+            <div class="tab">
+                Views
+            </div>
+        </div>
+        {% for post in user_posts%}
+        <div id="{{post.id}}" class="dashboard-post b t">
+            <div class="dashboard-thumbnail tab">
+                <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb-dash" alt="">
+            </div>
+            <div class="dashboard-title tab">
+                <div id="c">{{post.title}}</div>
+            </div>
+            <div class="dashboard-views tab">
+                <div id="c">{{post.views}}</div>
+            </div>
+
+        </div>
+        {% endfor%}
+
+
+
+    </div>
+    
+    {% endblock%}
+    
+</body>
+</html>

@@ -10,9 +10,10 @@ import datetime as dt
 from werkzeug.security import gen_salt, generate_password_hash,check_password_hash
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from forms import RegisterForm, BlogPostForm, LoginForm, SearchForm, ContactForm
+from forms import *
 import random
-import string
+from email.mime.text import MIMEText
+from threading import Thread
 from decoraters import proper_user_required, owner_required
 from functions import app,create_file_name
 
@@ -46,6 +47,7 @@ class User(UserMixin, db.Model):
     password = db.Column( db.String(250))
     registration_date = db.Column(db.String(100))
     profile_pic = db.Column(db.String(250))
+    forgot_password_code = db.Column(db.Integer)
     posts = relationship("BlogPosts", back_populates="author")
     draft_posts = relationship("DraftPosts", back_populates="author")
     post_history = relationship("UserPostHistory", back_populates="read_user")
@@ -141,11 +143,12 @@ def register():
         if user:
             flash("A user with this email already exits")
             return render_template("register.html", form = form)
-        length = random.randint(0,25)
+        length = random.randint(1,25)
         encoded = request.form["password"]
         #uploads the user information to the users table 
         user = User( username = request.form["username"],
                     email = request.form["email"],
+                    forgot_password_code = None,
                     password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length),
                     registration_date = dt.datetime.now().strftime("%b/%m/%Y"))
         db.session.add(user)
@@ -257,7 +260,59 @@ def show_post(post_id,post_title): #has the post just so its in the url
     return render_template("post.html", post = post)
 
 
+
+@app.route("/login/forgot_password", methods=["POST", "GET"])
+def forgot_password():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+    form = ForgotPasswordForm()
+    if request.method == "GET":
+        return render_template("forgot_password.html", form=form)
+    else:
+        email = request.form["email"]
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash("This Email not found")
+            return render_template("forgot_password.html", form=form)
+
+        code = random.randint(1000, 9999)
+        user.forgot_password_code = code
+        db.session.add(user)
+        db.session.commit()
+        url = f"http://localhost:5000{url_for('reset_password', username=user.username, email=user.email, user_id=str(user.id))}"
+
+        body = f'Your reset code is {code} click this link to continue {url}'
+        msg = MIMEText(body)
+        with SMTP("smtp.gmail.com", port=587) as connection:
+            connection.starttls()
+            connection.login("samuelwhitehall@gmail.com", password=os.environ["EMAIL_PASSWORD"])
+            connection.sendmail(from_addr="samuelwhitehall@gmail.com", to_addrs=email, msg=msg.as_string())
+        return "Hello "
+
+@app.route("/<username>/<email>/<user_id>/reset_password", methods = ["GET", "POST"])
+def reset_password(username, email, user_id):
+    form = PasswordResetForm()
+    if request.method == "GET":
+        return render_template("password_reset.html", form=form)
     
+    
+    user = User.query.filter_by(id = user_id).first()
+    
+    if str(user.forgot_password_code) != request.form["code"]:
+        flash("Please make sure the reset code you entered matches the one in your email")
+        return render_template("password_reset.html", form=form)
+            
+            
+    length = random.randint(1,25)
+    encoded = request.form["password1"]
+
+    user.password = generate_password_hash(encoded, method='pbkdf2:sha256',salt_length=length)
+    user.forgot_password_code == None
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for("home"))
+
+        
 @app.route('/search', methods=["POST"])
 def search():
     form = SearchForm()

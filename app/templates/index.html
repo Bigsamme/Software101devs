@@ -1,0 +1,48 @@
+
+{% extends "header.html" %}
+{% block title%}The 101 software developers {% endblock%}
+
+
+<body>
+    {% block content%}
+ <section class="explore" id="ex">
+    {% for post in posts%}
+    <a class="post" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
+    <div class="post-container">
+       
+        <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.thumbnail))}}"class="post-thumb" alt="">
+        <div class="post-info">
+        <div class="post-title">
+            {{post.title}}
+     
+        </div>
+        <div class="post-description">
+            <p>
+            {{post.description}}
+            </p>
+      
+        </div>
+     </div>
+    </div>
+    </a>
+    {% endfor%}
+    </section>
+    
+
+
+    <script src="{{url_for('static', filename='scripts/search-bar.js')}}"></script>
+
+    <script language="JavaScript" type="text/javascript" src="url_for('static, filename='scripts/mobile-menu.js')"> </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2F5L1915F"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-M2F5L1915F');
+    </script>
+</div>
+    {% endblock %}
+
+</body>
+</html>

@@ -35,3 +35,13 @@ class ContactForm(FlaskForm):
     subject = StringField("Subject",validators=[InputRequired()])
     message = CKEditorField("Message", validators=[InputRequired()])
     submit = SubmitField("Send")
+    
+class ForgotPasswordForm(FlaskForm):
+    email = EmailField("Email")
+    submit = SubmitField("Submit")
+    
+class PasswordResetForm(FlaskForm):
+    password1 = PasswordField("Password")
+    code = StringField("Reset Code")
+    password2 = PasswordField("Confirm password")
+    submit =  SubmitField("Submit Password")
