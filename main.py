@@ -10,7 +10,7 @@ import datetime as dt
 from werkzeug.security import gen_salt, generate_password_hash,check_password_hash
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from forms import *
+from forms import RegisterForm, ForgotPasswordForm, PasswordResetForm, LoginForm, BlogPostForm,SearchForm,ContactForm
 import random
 from email.mime.text import MIMEText
 from threading import Thread
