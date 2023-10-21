@@ -4,9 +4,14 @@
 
 <html lang="en">
     {% block title%} {{post.title}} {% endblock %}
+    {% block head%} 
+    <meta name="description" content="{{post.description}}">
+    <meta name="keywords" content="{{post.tags}}">
+    {%endblock%}
 
 <body>
     {% block content %} 
+
     <artical class="blog-page-article">
         <div class="blog-page-container">
             <div class="blog-page-content">

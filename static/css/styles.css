@@ -171,6 +171,11 @@ a {
 
 }
 
+div a img {
+  width: 50px;
+  height: 50px;
+}
+
 .post-title{
   height: fit-content;
   font-family: "Roboto","Arial",sans-serif;
