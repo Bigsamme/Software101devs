@@ -13,7 +13,7 @@ class RegisterForm(FlaskForm):
 class BlogPostForm(FlaskForm):
     title = StringField("Post Title",validators=[DataRequired(),InputRequired()])
     description = StringField("Post Description",validators=[DataRequired(),InputRequired()])
-    language = StringField("Post language",validators=[DataRequired(),InputRequired()])
+    tags = StringField("tags",validators=[DataRequired(),InputRequired()])
     thumbnail = FileField("Thumbnail",validators=[DataRequired(),InputRequired()])
     type  = StringField("Post type",validators=[DataRequired(),InputRequired()])
     body = CKEditorField("Blog Content",validators=[DataRequired(),InputRequired()])

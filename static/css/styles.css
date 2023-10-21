@@ -53,14 +53,45 @@ a {
 }
 
 
+.author-profile img{
+  border-radius: 30px;
+  width:32px;
+  height: 32px;
+
+}
+
+.author-info{
+  display: flex;
+}
+
+
+.author-profile{
+  display: inline-block;
+}
+
+.post-link{
+  text-decoration: none;
+  color: black;
+}
+
+
+.author-name{
+  font-size: 1.1rem;
+  color: rgb(165, 165, 165);
+  display: inline-block;
+  bottom: 0;
+  padding-top: 6px;
+  padding-left: 5px;
+}
+
 
 .post-thumb {
-  width: 25.3%;
-  height: auto;
+  width: 180px;
+  height: 165px;
+  border-radius: 5px;
   display: block;
-  max-width: 180px;
-  max-height: 145px;
-  margin: 10px 1% 10px 1%;
+
+
 }
 
 .post-thumb-dash {
@@ -74,6 +105,8 @@ a {
   font-size: 20px;
   max-width: 400px;
   overflow: hidden;
+  max-height: 135px;
+  text-overflow: ellipsis;
 }
 
 
@@ -86,9 +119,10 @@ a {
 
 
 .post-container {
-  background-color:#e8eaed ;
+  background-color:#ffffff ;
   display: flex;
-  flex-wrap: wrap;
+  border: 2px solid rgb(205, 205, 205);
+
   height: 165px;
   margin: 0 10px 5px 10px;
   border-radius: 5px;
@@ -103,20 +137,21 @@ a {
 .post-description {
   color: #000000;
   font-size: 18px;
-  height: 100px;
   opacity: .8;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align:start;
 }
 
 .post-description p{
+  height: fit-content;
+  overflow: hidden;
+  height: 65px;
+  margin-top: 0;
+  text-overflow: ellipsis;
   color: #000000;
-  font-size: 18px;
-  opacity: .6;
 }
 
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 800px) {
   .explore{
     display: block;
   }
@@ -126,21 +161,26 @@ a {
 
 
 
-.post-info{
+.post-info {
   display: block;
-  width: 70.7%;
+  width: 60%;
   font-size: 24px;
   margin-left: 2%;
   margin-top: 10px;
   height: 90%;
+
 }
 
 .post-title{
   height: fit-content;
+  font-family: "Roboto","Arial",sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 5px;
   overflow: hidden;
-  max-height: 55px;
-  text-overflow: clip;
-  color: #000000;
+  display: block;
+  max-height: 2.5rem;
 }
 
 
@@ -149,15 +189,7 @@ a {
   font-weight: 500;
 }
 
-@media screen and (max-width:1200px){
-  .post-container{
-    width: 100%;
-  }
 
-  .post{
-    width: 100%;
-  }
-}
 
 @media screen and (max-width:1575px){
   .post-container{
@@ -166,6 +198,17 @@ a {
 
   .post{
     width: 50%;
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width:1200px){
+  .post-container{
+    width: 100%;
+  }
+
+  .post{
+    width: 95%;
   }
 }
 
@@ -485,7 +528,7 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 .open .mobile-menu {
   display:inline-block;
-  width: 240px;
+  width: 180px;
   visibility: visible;
   height: 100vh;
   margin: 0;
@@ -509,10 +552,10 @@ input[type="search" i]::-webkit-search-cancel-button {
 .mobile-menu li a{
   text-decoration: none;
   color: white;
-  margin-left: 20px;
   font-family: "Roboto", "Noto", sans-serif;
   float: left;
   flex: 1;
+  align-self: center;
   flex-basis: 1e-9px;
   font-size: 1.4rem;
   opacity: 0;
@@ -543,6 +586,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   width: 90%;
   margin-left: 10px;
   border-radius: 5px; 
+  display: flex;
 }
 
 
@@ -876,6 +920,7 @@ input[type="search" i]::-webkit-search-cancel-button {
     height: 100%;
     object-fit: cover;
   }
+  
 
   .login-title {
     text-align: left;
@@ -887,7 +932,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   @media screen and (min-width:700px) {
     #login-form {
       margin-top: 100px;
-      border: 1px solid rgb(188, 188, 188);
+      border: 1px solid rgb(224, 224, 224);
       border-radius: 15px;
       height: fit-content;
       width: 55vw;

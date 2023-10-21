@@ -10,6 +10,7 @@ import datetime as dt
 from werkzeug.security import gen_salt, generate_password_hash,check_password_hash
 from datetime import datetime
 from sqlalchemy.orm import relationship
+from sqlalchemy import MetaData, Table
 from forms import RegisterForm, ForgotPasswordForm, PasswordResetForm, LoginForm, BlogPostForm,SearchForm,ContactForm
 import random
 from email.mime.text import MIMEText
@@ -60,7 +61,7 @@ class DraftPosts(db.Model):
     title = db.Column(db.String)
     description = db.Column( db. String(250))
     body = db.Column( db.Text)
-    language = db.Column( db.String(250))
+    tags = db.Column( db.String(250))
     type = db.Column( db.String(250))
     thumbnail = db.Column(db.String)
     views = db.Column(db.Integer)
@@ -88,14 +89,14 @@ class BlogPosts(db.Model):
     title = db.Column( db.String(250))
     description = db.Column( db. String(250))
     body = db.Column( db.Text)
-    language = db.Column( db.String(250))
+    tags = db.Column( db.String(250))
     type = db.Column( db.String(250))
     thumbnail = db.Column(db.String)
     views = db.Column(db.Integer)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     author = relationship("User", back_populates="posts")
     read_by_users = relationship("UserPostHistory", back_populates="post")
-    
+
 
 with app.app_context():
     db.create_all()
@@ -131,6 +132,8 @@ def about_us():
 
 @app.route('/register', methods = ["GET","POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = RegisterForm()
     if request.method == "GET":
         return render_template('register.html', form = form)
@@ -178,7 +181,8 @@ def login():
         return render_template("login.html", form = form)
     
     #The data provided by the user was all correct logs them in
-    login_user(user)
+    days = dt.timedelta(days = 31, seconds = 0)
+    login_user(user, remember = True, duration = days)
     return redirect(url_for('home'))
 
 @app.route('/users/dashboard/<username>')
@@ -229,7 +233,7 @@ def add_post():
             title=form.title.data,
             description=form.description.data,
             body=form.body.data,
-            language=form.language.data,
+            tags=form.tags.data,
             thumbnail = file_name,
             type=form.type.data,
             views = 0,
@@ -326,6 +330,14 @@ def search():
             posts = BlogPosts.query.all()
         return render_template("index.html",posts = posts)
     return redirect(url_for("home"))
+
+@app.route("/delete-post/<int:post_id>")
+def delete(post_id):
+    post = BlogPosts.query.filter_by(id = post_id).first()
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(url_for("dashboard", username = current_user.username))
+    
     
 @app.route('/logout')
 def logout():

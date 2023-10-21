@@ -3,6 +3,7 @@ from flask import request,Flask
 from flask_login import current_user
 import os
 import string
+from sqlalchemy import Table, MetaData
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = "static/images/profile_pics"
@@ -20,4 +21,5 @@ def create_file_name():
     file_name = '.'.join([file_path,type_])
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
     return file_name
+    
     
