@@ -854,6 +854,9 @@ input[type="search" i]::-webkit-search-cancel-button {
 
 
 
+  pre {
+    border-radius: 10px;
+  }
 
 
   @media screen and (max-width: 680px) {
@@ -871,7 +874,7 @@ input[type="search" i]::-webkit-search-cancel-button {
   @media screen and (min-width: 600px) {
     .blog-page-container{
       align-self: center;
-      max-width: 600px;
+      width: 600px;
     }
   }
   
