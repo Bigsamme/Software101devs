@@ -75,7 +75,6 @@ class UserPostHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     post_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"))
-    date_read = db.Column(db.DateTime, default=datetime.utcnow)
 
     read_user = relationship("User", back_populates="post_history")
     post = relationship("BlogPosts", back_populates="read_by_users")
@@ -216,6 +215,11 @@ def contact():
             connection.sendmail("samuelwhitehall@gmail.com", "samuelwhitehall@gmail.com", msg=f"Subject: {subject}\n\n From \n {email} Message : {message}")
         return redirect(url_for("home"))
         
+@app.route("/users/dashboard/<username>/read-history")
+def read_history(username):
+    user = User.query.filter_by(username = username).first()
+    read = UserPostHistory.query.filter_by(user_id = user.id).all()
+    return render_template('read_history.html', user = current_user ,user_posts = read)
 
 @app.route("/add_post", methods=["GET", "POST"])
 def add_post():
@@ -334,6 +338,9 @@ def search():
 @app.route("/delete-post/<int:post_id>")
 def delete(post_id):
     post = BlogPosts.query.filter_by(id = post_id).first()
+    read = UserPostHistory.query.filter_by(post_id = post_id).all()
+    for i in read:
+        db.session.delete(i)
     db.session.delete(post)
     db.session.commit()
     return redirect(url_for("dashboard", username = current_user.username))

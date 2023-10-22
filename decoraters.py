@@ -8,7 +8,7 @@ def proper_user_required(func):
     @wraps(func)
     def decorated_function(*args, **kwargs):
         if current_user.username != kwargs.get("username"):
-            return redirect(url_for('add_post'))
+            return redirect(url_for('home'))
         return func(*args, **kwargs)
     return decorated_function
 

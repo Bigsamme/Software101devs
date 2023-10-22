@@ -1,0 +1,56 @@
+{%extends "header.html"%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}{{user.username}}'s dashboard{% endblock%}
+</head>
+<body>
+    {% block content%}
+    <div class="dashboard-head t1">
+        <h1>History</h1>
+    </div>
+
+        {% for post in user_posts%}
+        <div class="post" >
+            <div class="post-container">
+                <a href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
+                
+                <img src="{{url_for('static', filename='images/profile_pics/{}'.format(post.post.thumbnail))}}"class="post-thumb" alt="">
+                </a>
+                <div class="post-info">
+                    <div class="author-info">
+                        <div class="author-profile">
+                            <img src="{{url_for('static', filename = 'images/favicon.ico')}}">
+                        </div>
+                        <div class= "author-name">
+                            {{post.post.author.username}}
+                        </div>
+                    </div>
+                    <a class="post-link" href="{{url_for('show_post', post_id = post.id, post_title = post.title)}}">
+
+                    <div class="post-title">
+                        {{post.post.title}}
+                    </div>
+                    
+                    <div class="post-description">
+                        <p>
+                            {{post.post.description}}
+                        </p>
+                    </div>
+                </a>
+
+                </div>
+            </div>
+        </div>
+        <a href="{{url_for('delete', post_id = post.id)}}">Remove</a>
+        {% endfor%}
+
+
+
+    </div>
+    
+    {% endblock%}
+    
+</body>
+</html>

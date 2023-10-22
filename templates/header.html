@@ -32,7 +32,7 @@
                <li><a href="{{url_for('add_post')}}"> Add Post</a></li>
                <li><a href="{{url_for('logout')}}"> Log Out</a></li>
                <li> <a href="#">Read Later</a></li>
-               <li> <a href="#">History</a></li>
+               <li> <a href="{{url_for('read_history', username = current_user.username)}}">History</a></li>
                {% endif%}
             </ul>
           <div id="mobile-back">
